@@ -1,6 +1,5 @@
 import pytest
 from fastapi.testclient import TestClient
-
 from function.core.config import settings
 from function.main import app
 
