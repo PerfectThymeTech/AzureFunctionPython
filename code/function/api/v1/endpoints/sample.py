@@ -14,4 +14,4 @@ async def post_predict(
     data: SampleRequest,
 ) -> SampleResponse:
     logger.info(f"Received request: {data}")
-    return SampleResponse(output=f"Hello ${data.input}")
+    return SampleResponse(output=f"Hello {data.input}")
