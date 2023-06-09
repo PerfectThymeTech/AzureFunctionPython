@@ -41,4 +41,4 @@ jobs:
         run: |
           pip install -r ./code/function/requirements.txt -q
           pip install -r requirements.txt -q
-          python -m pytest
+          pytest
