@@ -12,7 +12,7 @@ def client() -> TestClient:
 @pytest.mark.parametrize("version", ("v1",))
 def test_get_heartbeat(client, version):
     # arrange
-    path = f"/health/{version}/heartbeat"
+    path = f"/{version}/health/heartbeat"
 
     # action
     response = client.get(path)
