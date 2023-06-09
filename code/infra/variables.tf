@@ -10,8 +10,8 @@ variable "environment" {
   sensitive   = false
   default     = "dev"
   validation {
-    condition     = contains(["dev", "tst", "prd"], var.environment)
-    error_message = "Please use an allowed value: \"dev\", \"tst\" or \"prd\"."
+    condition     = contains(["int", "dev", "tst", "qa", "uat", "prd"], var.environment)
+    error_message = "Please use an allowed value: \"int\", \"dev\", \"tst\", \"qa\", \"uat\" or \"prd\"."
   }
 }
 
@@ -27,14 +27,9 @@ variable "prefix" {
 
 variable "tags" {
   description = "Specifies the tags that you want to apply to all resources."
-  type        = map(any)
+  type        = map(string)
   sensitive   = false
-}
-
-variable "timestamp_expiry" {
-  description = "Specifies the initial key vault key expiry."
-  type        = number
-  sensitive   = false
+  default     = {}
 }
 
 variable "vnet_id" {

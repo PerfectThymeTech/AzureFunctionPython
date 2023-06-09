@@ -4,22 +4,22 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.53.0"
+      version = "3.59.0"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "1.5.0"
+      version = "1.6.0"
     }
   }
 
   backend "azurerm" {
     environment          = "public"
-    subscription_id      = "176a0de9-d99e-4faa-90cc-89780e1186fe"
-    resource_group_name  = "workload000-cicd"
-    storage_account_name = "workload000stg001"
-    container_name       = "terraform"
-    key                  = "terraform-function20.tfstate"
-    use_oidc             = true
+    subscription_id      = "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
+    resource_group_name  = "mycrp-prd-cicd"
+    storage_account_name = "mycrpprdstg001"
+    container_name       = "function"
+    key                  = "terraform.tfstate"
+    # use_oidc             = true
   }
 }
 
@@ -28,7 +28,7 @@ provider "azurerm" {
   environment                    = "public"
   skip_provider_registration     = false
   storage_use_azuread            = true
-  use_oidc                       = true
+  # use_oidc                       = true
 
   features {
     key_vault {
@@ -52,5 +52,5 @@ provider "azapi" {
   disable_correlation_request_id = false
   environment                    = "public"
   skip_provider_registration     = false
-  use_oidc                       = true
+  # use_oidc                       = true
 }
