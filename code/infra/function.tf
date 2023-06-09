@@ -131,3 +131,25 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
     }
   }
 }
+
+resource "azurerm_private_endpoint" "function_private_endpoint" {
+  name                = "${azapi_resource.function.name}-pe"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.app_rg.name
+  tags                = var.tags
+
+  custom_network_interface_name = "${azapi_resource.function.name}-nic"
+  private_service_connection {
+    name                           = "${azapi_resource.function.name}-pe"
+    is_manual_connection           = false
+    private_connection_resource_id = azapi_resource.function.id
+    subresource_names              = ["sites"]
+  }
+  subnet_id = azapi_resource.subnet_services.id
+  private_dns_zone_group {
+    name = "${azapi_resource.function.name}-arecord"
+    private_dns_zone_ids = [
+      var.private_dns_zone_id_sites
+    ]
+  }
+}

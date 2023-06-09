@@ -116,3 +116,14 @@ variable "private_dns_zone_id_key_vault" {
     error_message = "Please specify a valid resource ID for the private DNS Zone."
   }
 }
+
+variable "private_dns_zone_id_sites" {
+  description = "Specifies the resource ID of the private DNS zone for Azure Websites. Not required if DNS A-records get created via Azue Policy."
+  type        = string
+  sensitive   = false
+  default     = ""
+  validation {
+    condition     = var.private_dns_zone_id_sites == "" || (length(split("/", var.private_dns_zone_id_sites)) == 9 && endswith(var.private_dns_zone_id_sites, "privatelink.azurewebsites.net"))
+    error_message = "Please specify a valid resource ID for the private DNS Zone."
+  }
+}
