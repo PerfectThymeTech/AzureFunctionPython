@@ -9,7 +9,7 @@ logger = setup_logging(__name__)
 router = APIRouter()
 
 
-@router.post("/create", response_model=SampleResponse, name="create")
+@router.post("/sample", response_model=SampleResponse, name="sample")
 async def post_predict(
     data: SampleRequest,
 ) -> SampleResponse:
