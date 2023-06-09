@@ -1,4 +1,4 @@
-name: Python - Lint and Test
+name: Python - Test
 on:
   push:
     branches:
@@ -19,7 +19,7 @@ on:
 
 jobs:
   lint:
-    name: Lint and Test
+    name: Python Test
     runs-on: ubuntu-latest
 
     steps:
@@ -39,5 +39,6 @@ jobs:
       - name: Run Python Tests
         id: python_test
         run: |
+          pip install -r ./code/function/requirements.txt -q
           pip install -r requirements.txt -q
           python -m pytest
