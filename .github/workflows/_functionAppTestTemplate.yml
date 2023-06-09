@@ -1,0 +1,41 @@
+name: Function App Test Template
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        required: true
+        type: string
+        default: "3.10"
+        description: "Specifies the python version."
+      function_directory:
+        required: true
+        type: string
+        description: "Specifies the directory of the Azure Function."
+
+jobs:
+  deployment:
+    name: Function App Test
+    runs-on: ubuntu-latest
+    continue-on-error: false
+
+    steps:
+      # Setup Python 3.10
+      - name: Setup Python 3.10
+        id: python_setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      # Check Out Repository
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v3
+
+      # Run Python Tests
+      - name: Run Python Tests
+        id: python_test
+        run: |
+          pip install -r ${{ inputs.function_directory }}/requirements.txt -q
+          pip install -r requirements.txt -q
+          pytest
