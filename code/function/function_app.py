@@ -1,29 +1,34 @@
-import logging
-
 import azure.functions as func
+from fastapi import FastAPI
+from function.api.v1.api_v1 import api_v1_router
+from function.core.config import settings
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+
+def get_app() -> FastAPI:
+    app = FastAPI(
+        title=settings.PROJECT_NAME,
+        version=settings.APP_VERSION,
+        openapi_url="/openapi.json",
+        debug=settings.DEBUG,
+    )
+    app.include_router(api_v1_router, prefix=settings.API_V1_STR)
+    return app
 
 
-@app.route(route="HttpTrigger")
-def HttpTrigger(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info("Python HTTP trigger function processed a request.")
+fastapi_app = get_app()
 
-    name = req.params.get("name")
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get("name")
 
-    if name:
-        return func.HttpResponse(
-            f"Hello, {name}. This HTTP triggered function executed successfully."
-        )
-    else:
-        return func.HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-            status_code=200,
-        )
+@fastapi_app.on_event("startup")
+async def startup_event():
+    pass
+
+
+@fastapi_app.on_event("shutdown")
+async def shutdown_event():
+    pass
+
+
+app = func.AsgiFunctionApp(
+    app=fastapi_app,
+    http_auth_level=func.AuthLevel.FUNCTION,
+)
