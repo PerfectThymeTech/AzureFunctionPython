@@ -3,12 +3,6 @@ resource "azurerm_storage_account" "storage" {
   location            = var.location
   resource_group_name = azurerm_resource_group.app_rg.name
   tags                = var.tags
-  identity {
-    type = "UserAssigned"
-    identity_ids = [
-      azurerm_user_assigned_identity.user_assigned_identity.id
-    ]
-  }
 
   access_tier                     = "Hot"
   account_kind                    = "StorageV2"
@@ -52,10 +46,6 @@ resource "azurerm_storage_account" "storage" {
   }
   sftp_enabled              = false
   shared_access_key_enabled = false
-
-  depends_on = [
-    azurerm_role_assignment.role_assignment_key_vault_uai
-  ]
 }
 
 resource "azurerm_storage_management_policy" "storage_management_policy" {
