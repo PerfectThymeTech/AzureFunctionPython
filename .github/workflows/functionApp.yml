@@ -31,7 +31,4 @@ jobs:
       function_directory: "./code/function"
       function_name: "myfunc-dev-fctn001"
     secrets:
-      TENANT_ID: ${{ secrets.TENANT_ID }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      FUNCTION_PUBLISH_PROFILE: ${{ secrets.FUNCTION_PUBLISH_PROFILE }}
