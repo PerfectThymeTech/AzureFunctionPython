@@ -1,0 +1,83 @@
+name: Function App Deploy Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        default: "dev"
+        description: "Specifies the environment of the deployment."
+      python_version:
+        required: true
+        type: string
+        default: "3.10"
+        description: "Specifies the python version."
+      function_directory:
+        required: true
+        type: string
+        description: "Specifies the directory of the Azure Function."
+      function_name:
+        required: true
+        type: string
+        description: "Specifies the name of the Azure Function."
+    secrets:
+      TENANT_ID:
+        required: true
+        description: "Specifies the tenant id of the deployment."
+      CLIENT_ID:
+        required: true
+        description: "Specifies the client id."
+      CLIENT_SECRET:
+        required: true
+        description: "Specifies the client secret."
+      SUBSCRIPTION_ID:
+        required: true
+        description: "Specifies the client id."
+
+jobs:
+  deployment:
+    name: Function App Deploy
+    runs-on: self-hosted
+    continue-on-error: false
+    environment: ${{ inputs.environment }}
+
+    steps:
+      # Setup Python 3.10
+      - name: Setup Python 3.10
+        id: python_setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      # Check Out Repository
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v3
+
+      # Install Function Dependencies
+      - name: Resolve Function Dependencies
+        id: function_dependencies
+        shell: bash
+        run: |
+          pushd '${{ inputs.function_directory }}'
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          popd
+
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+
+      # Deploy Function
+      - name: Deploy Function
+        id: function_deploy
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ inputs.function_name }}
+          package: ${{ inputs.function_directory }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true

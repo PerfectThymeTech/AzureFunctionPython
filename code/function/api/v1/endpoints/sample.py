@@ -9,9 +9,9 @@ logger = setup_logging(__name__)
 router = APIRouter()
 
 
-@router.post("/create", response_model=SampleResponse, name="create")
+@router.post("/sample", response_model=SampleResponse, name="sample")
 async def post_predict(
     data: SampleRequest,
 ) -> SampleResponse:
     logger.info(f"Received request: {data}")
-    return SampleResponse(output=f"Hello ${data.input}")
+    return SampleResponse(output=f"Hello {data.input}")

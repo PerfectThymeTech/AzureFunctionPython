@@ -40,7 +40,9 @@ resource "azapi_resource" "function" {
       scmSiteAlsoStopped        = false
       serverFarmId              = azurerm_service_plan.service_plan.id
       storageAccountRequired    = false
+      vnetContentShareEnabled   = true
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
+      vnetRouteAllEnabled       = true
       siteConfig = {
         autoHealEnabled            = false
         acrUseManagedIdentityCreds = false
@@ -67,6 +69,10 @@ resource "azapi_resource" "function" {
             value = "1"
           },
           {
+            name  = "WEBSITE_RUN_FROM_PACKAGE"
+            value = "1"
+          },
+          {
             name  = "AzureWebJobsStorage__accountName"
             value = azurerm_storage_account.storage.name
           }
@@ -75,10 +81,10 @@ resource "azapi_resource" "function" {
         detailedErrorLoggingEnabled            = true
         functionAppScaleLimit                  = 0
         functionsRuntimeScaleMonitoringEnabled = false
-        ftpsState                              = "FtpsOnly"
+        ftpsState                              = "Disabled"
         http20Enabled                          = false
         ipSecurityRestrictionsDefaultAction    = "Deny"
-        linuxFxVersion                         = "Python|3.10"
+        linuxFxVersion                         = "Python|${var.python_version}"
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
@@ -89,7 +95,6 @@ resource "azapi_resource" "function" {
         scmIpSecurityRestrictionsUseMain       = false
         scmIpSecurityRestrictionsDefaultAction = "Deny"
         use32BitWorkerProcess                  = true
-        vnetRouteAllEnabled                    = true
         vnetPrivatePortsCount                  = 0
         webSocketsEnabled                      = false
       }
@@ -129,5 +134,27 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
         days    = 30
       }
     }
+  }
+}
+
+resource "azurerm_private_endpoint" "function_private_endpoint" {
+  name                = "${azapi_resource.function.name}-pe"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.app_rg.name
+  tags                = var.tags
+
+  custom_network_interface_name = "${azapi_resource.function.name}-nic"
+  private_service_connection {
+    name                           = "${azapi_resource.function.name}-pe"
+    is_manual_connection           = false
+    private_connection_resource_id = azapi_resource.function.id
+    subresource_names              = ["sites"]
+  }
+  subnet_id = azapi_resource.subnet_services.id
+  private_dns_zone_group {
+    name = "${azapi_resource.function.name}-arecord"
+    private_dns_zone_ids = [
+      var.private_dns_zone_id_sites
+    ]
   }
 }

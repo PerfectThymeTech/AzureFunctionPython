@@ -33,7 +33,7 @@ variable "tags" {
 }
 
 variable "vnet_id" {
-  description = "Specifies the resource ID of the Vnet used for the Data Landing Zone"
+  description = "Specifies the resource ID of the Vnet used for the Azure Function."
   type        = string
   sensitive   = false
   validation {
@@ -43,7 +43,7 @@ variable "vnet_id" {
 }
 
 variable "nsg_id" {
-  description = "Specifies the resource ID of the default network security group for the Data Landing Zone"
+  description = "Specifies the resource ID of the default network security group for the Azure Function."
   type        = string
   sensitive   = false
   validation {
@@ -53,12 +53,23 @@ variable "nsg_id" {
 }
 
 variable "route_table_id" {
-  description = "Specifies the resource ID of the default route table for the Data Landing Zone"
+  description = "Specifies the resource ID of the default route table for the Azure Function."
   type        = string
   sensitive   = false
   validation {
     condition     = length(split("/", var.route_table_id)) == 9
     error_message = "Please specify a valid resource ID."
+  }
+}
+
+variable "python_version" {
+  description = "Specifies the python version of the Azure Function."
+  type        = string
+  sensitive   = false
+  default     = "3.10"
+  validation {
+    condition     = contains(["3.9", "3.10"], var.python_version)
+    error_message = "Please specify a valid Python version."
   }
 }
 
@@ -113,6 +124,17 @@ variable "private_dns_zone_id_key_vault" {
   default     = ""
   validation {
     condition     = var.private_dns_zone_id_key_vault == "" || (length(split("/", var.private_dns_zone_id_key_vault)) == 9 && endswith(var.private_dns_zone_id_key_vault, "privatelink.vaultcore.azure.net"))
+    error_message = "Please specify a valid resource ID for the private DNS Zone."
+  }
+}
+
+variable "private_dns_zone_id_sites" {
+  description = "Specifies the resource ID of the private DNS zone for Azure Websites. Not required if DNS A-records get created via Azue Policy."
+  type        = string
+  sensitive   = false
+  default     = ""
+  validation {
+    condition     = var.private_dns_zone_id_sites == "" || (length(split("/", var.private_dns_zone_id_sites)) == 9 && endswith(var.private_dns_zone_id_sites, "privatelink.azurewebsites.net"))
     error_message = "Please specify a valid resource ID for the private DNS Zone."
   }
 }
