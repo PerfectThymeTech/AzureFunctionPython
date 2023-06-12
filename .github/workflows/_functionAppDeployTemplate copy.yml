@@ -22,18 +22,9 @@ on:
         type: string
         description: "Specifies the name of the Azure Function."
     secrets:
-      TENANT_ID:
+      FUNCTION_PUBLISH_PROFILE:
         required: true
-        description: "Specifies the tenant id of the deployment."
-      CLIENT_ID:
-        required: true
-        description: "Specifies the client id."
-      CLIENT_SECRET:
-        required: true
-        description: "Specifies the client secret."
-      SUBSCRIPTION_ID:
-        required: true
-        description: "Specifies the client id."
+        description: "Specifies the publish profile of the function."
 
 jobs:
   deployment:
@@ -65,20 +56,13 @@ jobs:
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
 
-      # Login to Azure
-      - name: Azure Login
-        id: azure_login
-        uses: azure/login@v1
-        with:
-          creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
-
       # Deploy Function
       - name: Deploy Function
         id: function_deploy
-        working-directory: ${{ inputs.function_directory }}
-        shell: bash
-        run: |
-          func azure functionapp publish ${{ inputs.function_name }} \
-            --build remote \
-            --build-native-deps \
-            --python
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ inputs.function_name }}
+          package: ${{ inputs.function_directory }}
+          publish-profile: ${{ secrets.FUNCTION_PUBLISH_PROFILE }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
