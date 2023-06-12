@@ -84,7 +84,7 @@ resource "azapi_resource" "function" {
         ftpsState                              = "Disabled"
         http20Enabled                          = false
         ipSecurityRestrictionsDefaultAction    = "Deny"
-        linuxFxVersion                         = "Python|3.10"
+        linuxFxVersion                         = "Python|${var.python_version}"
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
