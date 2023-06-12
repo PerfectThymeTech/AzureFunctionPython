@@ -21,10 +21,6 @@ on:
         required: true
         type: string
         description: "Specifies the name of the Azure Function."
-      function_resource_group_name:
-        required: true
-        type: string
-        description: "Specifies the resouce group name of the Azure Function."
     secrets:
       TENANT_ID:
         required: true
@@ -79,12 +75,9 @@ jobs:
       # Deploy Function
       - name: Deploy Function
         id: function_deploy
-        working-directory: ${{ inputs.function_directory }}
-        shell: bash
-        run: |
-          zip -r function.zip *
-          az functionapp deploy \
-            --resource-group ${{ inputs.function_resource_group_name }} \
-            --name ${{ inputs.function_name }} \
-            --src-path ./function.zip \
-            --type zip
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ inputs.function_name }}
+          package: ${{ inputs.function_directory }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true

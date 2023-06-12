@@ -30,7 +30,6 @@ jobs:
       python_version: "3.10"
       function_directory: "./code/function"
       function_name: "myfunc-dev-fctn001"
-      function_resource_group_name: "myfunc-dev-app-rg"
     secrets:
       TENANT_ID: ${{ secrets.TENANT_ID }}
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
