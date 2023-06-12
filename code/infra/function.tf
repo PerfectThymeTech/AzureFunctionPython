@@ -40,7 +40,9 @@ resource "azapi_resource" "function" {
       scmSiteAlsoStopped        = false
       serverFarmId              = azurerm_service_plan.service_plan.id
       storageAccountRequired    = false
+      vnetContentShareEnabled   = true
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
+      vnetRouteAllEnabled       = true
       siteConfig = {
         autoHealEnabled            = false
         acrUseManagedIdentityCreds = false
@@ -75,7 +77,7 @@ resource "azapi_resource" "function" {
         detailedErrorLoggingEnabled            = true
         functionAppScaleLimit                  = 0
         functionsRuntimeScaleMonitoringEnabled = false
-        ftpsState                              = "FtpsOnly"
+        ftpsState                              = "Disabled"
         http20Enabled                          = false
         ipSecurityRestrictionsDefaultAction    = "Deny"
         linuxFxVersion                         = "Python|3.10"
@@ -89,7 +91,6 @@ resource "azapi_resource" "function" {
         scmIpSecurityRestrictionsUseMain       = false
         scmIpSecurityRestrictionsDefaultAction = "Deny"
         use32BitWorkerProcess                  = true
-        vnetRouteAllEnabled                    = true
         vnetPrivatePortsCount                  = 0
         webSocketsEnabled                      = false
       }
