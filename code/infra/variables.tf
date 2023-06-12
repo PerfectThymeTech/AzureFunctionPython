@@ -33,7 +33,7 @@ variable "tags" {
 }
 
 variable "vnet_id" {
-  description = "Specifies the resource ID of the Vnet used for the Data Landing Zone"
+  description = "Specifies the resource ID of the Vnet used for the Azure Function."
   type        = string
   sensitive   = false
   validation {
@@ -43,7 +43,7 @@ variable "vnet_id" {
 }
 
 variable "nsg_id" {
-  description = "Specifies the resource ID of the default network security group for the Data Landing Zone"
+  description = "Specifies the resource ID of the default network security group for the Azure Function."
   type        = string
   sensitive   = false
   validation {
@@ -53,12 +53,23 @@ variable "nsg_id" {
 }
 
 variable "route_table_id" {
-  description = "Specifies the resource ID of the default route table for the Data Landing Zone"
+  description = "Specifies the resource ID of the default route table for the Azure Function."
   type        = string
   sensitive   = false
   validation {
     condition     = length(split("/", var.route_table_id)) == 9
     error_message = "Please specify a valid resource ID."
+  }
+}
+
+variable "python_version" {
+  description = "Specifies the python version of the Azure Function."
+  type        = string
+  sensitive   = false
+  default     = "3.10"
+  validation {
+    condition     = contains(["3.9", "3.10"], var.python_version)
+    error_message = "Please specify a valid Python version."
   }
 }
 
