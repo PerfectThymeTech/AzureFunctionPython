@@ -69,6 +69,10 @@ resource "azapi_resource" "function" {
             value = "1"
           },
           {
+            name  = "WEBSITE_RUN_FROM_PACKAGE"
+            value = "1"
+          },
+          {
             name  = "AzureWebJobsStorage__accountName"
             value = azurerm_storage_account.storage.name
           }
