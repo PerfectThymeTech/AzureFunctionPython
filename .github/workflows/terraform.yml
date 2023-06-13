@@ -5,12 +5,14 @@ on:
       - main
     paths:
       - "**.tf"
+      - "code/infra/**"
 
   pull_request:
     branches:
       - main
     paths:
       - "**.tf"
+      - "code/infra/**"
 
 jobs:
   terraform_lint:

@@ -1,8 +1,8 @@
 from typing import Any
 
 from fastapi import APIRouter
-from function.models.sample import SampleRequest, SampleResponse
-from function.utils import setup_logging
+from fastapp.models.sample import SampleRequest, SampleResponse
+from fastapp.utils import setup_logging
 
 logger = setup_logging(__name__)
 

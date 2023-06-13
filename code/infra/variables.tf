@@ -62,14 +62,24 @@ variable "route_table_id" {
   }
 }
 
-variable "python_version" {
+variable "function_python_version" {
   description = "Specifies the python version of the Azure Function."
   type        = string
   sensitive   = false
   default     = "3.10"
   validation {
-    condition     = contains(["3.9", "3.10"], var.python_version)
+    condition     = contains(["3.9", "3.10"], var.function_python_version)
     error_message = "Please specify a valid Python version."
+  }
+}
+
+variable "function_health_path" {
+  description = "Specifies the health endpoint of the Azure Function."
+  type        = string
+  sensitive   = false
+  validation {
+    condition     = startswith(var.function_health_path, "/")
+    error_message = "Please specify a valid path."
   }
 }
 
