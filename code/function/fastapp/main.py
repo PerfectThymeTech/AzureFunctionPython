@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from fastapi.api.v1.api_v1 import api_v1_router
-from fastapi.core.config import settings
+from fastapp.api.v1.api_v1 import api_v1_router
+from fastapp.core.config import settings
 
 
 def get_app() -> FastAPI:

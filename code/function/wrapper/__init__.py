@@ -1,5 +1,5 @@
 import azure.functions as func
-from fastapi.main import app
+from fastapp.main import app
 
 
 async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:

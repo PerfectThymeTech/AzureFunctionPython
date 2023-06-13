@@ -1,7 +1,7 @@
 import logging
 from logging import Logger
 
-from fastapi.core.config import settings
+from fastapp.core.config import settings
 
 
 def setup_logging(module) -> Logger:

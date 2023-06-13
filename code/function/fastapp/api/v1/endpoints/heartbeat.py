@@ -1,8 +1,8 @@
 from typing import Any
 
 from fastapi import APIRouter
-from fastapi.models.heartbeat import HearbeatResult
-from fastapi.utils import setup_logging
+from fastapp.models.heartbeat import HearbeatResult
+from fastapp.utils import setup_logging
 
 logger = setup_logging(__name__)
 
