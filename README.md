@@ -49,10 +49,10 @@ The deployed services ensure a compliant encryption setup using the following fe
 
 The Azure Function code is written in Python and leverages the new [Web Framework integration](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=asgi%2Capplication-level&pivots=python-mode-decorators#web-frameworks) supported by the v2 Python programming model. This allows to rely on proven frameworks such as FastAPI and Flask. The Azure Function application code can be found in the [`/code/function` folder](/code/function/).
 
-## FastAPI
+### FastAPI
 
 This sample uses FastAPI as a baseline which is a scalable, modern, fast and proven web framework for APIs built in Python. More details about FastAPI can be found [here](https://fastapi.tiangolo.com/).
 
-## Testing
+### Testing
 
 Testing of the Azure Functon application code. The testing is done using `pytest`. Tests are stored in the [`/tests` folder](/tests/) and should be extended for new functionality that is being implemented over time. The `pytest.ini` is used to reference the Azure Functon project for imports. This file makes sure that the respective python objects from the Azrue Function application code can be imported into the tests and validated accordingly.
