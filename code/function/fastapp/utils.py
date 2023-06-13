@@ -2,7 +2,6 @@ import logging
 from logging import Logger
 
 from fastapp.core.config import settings
-from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 
 def setup_logging(module) -> Logger:
@@ -20,15 +19,4 @@ def setup_logging(module) -> Logger:
         logging.Formatter("[%(asctime)s] [%(levelname)s] [%(module)-8.8s] %(message)s")
     )
     logger.addHandler(logger_stream_handler)
-
-    # Add azure event handler
-    if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
-        azure_log_handler = AzureLogHandler()
-        azure_log_handler.setFormatter(
-            logging.Formatter(
-                "[%(asctime)s] [%(levelname)s] [%(module)-8.8s] %(message)s"
-            )
-        )
-        logger.addHandler(azure_log_handler)
-
     return logger
