@@ -1,4 +1,4 @@
-import azure.functions as func
+# import azure.functions as func
 from fastapi import FastAPI
 from function.api.v1.api_v1 import api_v1_router
 from function.core.config import settings
@@ -28,11 +28,11 @@ async def shutdown_event():
     pass
 
 
-app = func.AsgiFunctionApp(
-    app=fastapi_app,
-    http_auth_level=func.AuthLevel.ANONYMOUS,
-)
+# app = func.AsgiFunctionApp(
+#     app=fastapi_app,
+#     http_auth_level=func.AuthLevel.ANONYMOUS,
+# )
 
 
-async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
-    return await func.AsgiMiddleware(fastapi_app).handle_async(req, context)
+# async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+#     return await func.AsgiMiddleware(fastapi_app).handle_async(req, context)
