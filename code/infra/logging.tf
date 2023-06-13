@@ -101,3 +101,23 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_log_analytics_
     }
   }
 }
+
+resource "azurerm_monitor_private_link_scope" "mpls" {
+  name                = "${local.prefix}-ampls001"
+  resource_group_name = azurerm_resource_group.logging_rg.name
+  tags                = var.tags
+}
+
+resource "azurerm_monitor_private_link_scoped_service" "mpls_application_insights" {
+  name                = "ampls-${azurerm_application_insights.application_insights.name}"
+  resource_group_name = azurerm_monitor_private_link_scope.mpls.resource_group_name
+  scope_name          = azurerm_monitor_private_link_scope.mpls.name
+  linked_resource_id  = azurerm_application_insights.application_insights.id
+}
+
+resource "azurerm_monitor_private_link_scoped_service" "mpls_log_analytics_workspace" {
+  name                = "ampls-${azurerm_log_analytics_workspace.log_analytics_workspace.name}"
+  resource_group_name = azurerm_monitor_private_link_scope.mpls.resource_group_name
+  scope_name          = azurerm_monitor_private_link_scope.mpls.name
+  linked_resource_id  = azurerm_log_analytics_workspace.log_analytics_workspace.id
+}
