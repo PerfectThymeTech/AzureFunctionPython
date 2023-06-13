@@ -3,10 +3,8 @@ from logging import Logger
 
 from fastapp.core.config import settings
 from opencensus.extension.azure.functions import OpenCensusExtension
-from opencensus.trace import config_integration
 
 if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
-    config_integration.trace_integrations(["requests"])
     OpenCensusExtension.configure()
 
 
