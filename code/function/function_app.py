@@ -32,3 +32,7 @@ app = func.AsgiFunctionApp(
     app=fastapi_app,
     http_auth_level=func.AuthLevel.ANONYMOUS,
 )
+
+
+async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    return await app.handle_async(req, context)
