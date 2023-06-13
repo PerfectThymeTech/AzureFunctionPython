@@ -2,10 +2,6 @@ import logging
 from logging import Logger
 
 from fastapp.core.config import settings
-from opencensus.extension.azure.functions import OpenCensusExtension
-
-if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
-    OpenCensusExtension.configure()
 
 
 def setup_logging(module) -> Logger:
