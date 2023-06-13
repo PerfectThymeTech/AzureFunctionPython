@@ -11,7 +11,7 @@ def setup_logging(module) -> Logger:
     """
     logger = logging.getLogger(module)
     logger.setLevel(settings.LOGGING_LEVEL)
-    logger.propagate = False
+    logger.propagate = True
 
     # Create stream handler
     logger_stream_handler = logging.StreamHandler()
