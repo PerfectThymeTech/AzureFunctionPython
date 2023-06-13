@@ -70,10 +70,18 @@ resource "azapi_resource" "function" {
           },
           {
             name  = "WEBSITE_RUN_FROM_PACKAGE"
-            value = "1"
+            value = "0"
           },
           {
             name  = "PYTHON_ENABLE_WORKER_EXTENSIONS"
+            value = "1"
+          },
+          {
+            name  = "ENABLE_ORYX_BUILD"
+            value = "1"
+          },
+          {
+            name  = "SCM_DO_BUILD_DURING_DEPLOYMENT"
             value = "1"
           },
           {
@@ -86,9 +94,10 @@ resource "azapi_resource" "function" {
         functionAppScaleLimit                  = 0
         functionsRuntimeScaleMonitoringEnabled = false
         ftpsState                              = "Disabled"
+        healthCheckPath                        = var.function_health_path
         http20Enabled                          = false
         ipSecurityRestrictionsDefaultAction    = "Deny"
-        linuxFxVersion                         = "Python|${var.python_version}"
+        linuxFxVersion                         = "Python|${var.function_python_version}"
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
