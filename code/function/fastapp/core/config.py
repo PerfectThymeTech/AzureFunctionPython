@@ -1,6 +1,6 @@
 import logging
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/v1"
     LOGGING_LEVEL: int = logging.INFO
     DEBUG: bool = False
+    APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
+        default="", env="APPLICATIONINSIGHTS_CONNECTION_STRING"
+    )
 
 
 settings = Settings()
