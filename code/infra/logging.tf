@@ -143,7 +143,7 @@ resource "azurerm_private_endpoint" "mpls_private_endpoint" {
       var.private_dns_zone_id_oms_opinsights,
       var.private_dns_zone_id_ods_opinsights,
       var.private_dns_zone_id_automation_agents,
-      var.var.private_dns_zone_id_blob
+      var.private_dns_zone_id_blob
     ]
   }
 }
