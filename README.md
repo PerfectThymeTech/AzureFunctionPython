@@ -47,4 +47,4 @@ The deployed services ensure a compliant encryption setup using the following fe
 
 ## Azure Function Code
 
-TODO
+The Azure Function code is written in Python and leverages the new [Web Framework integration](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=asgi%2Capplication-level&pivots=python-mode-decorators#web-frameworks) supported by the v2 Python programming model.

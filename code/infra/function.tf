@@ -73,6 +73,10 @@ resource "azapi_resource" "function" {
             value = "1"
           },
           {
+            name  = "PYTHON_ENABLE_WORKER_EXTENSIONS"
+            value = "1"
+          },
+          {
             name  = "AzureWebJobsStorage__accountName"
             value = azurerm_storage_account.storage.name
           }
