@@ -1,11 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
-from fastapp.main import fastapi_app
+from fastapp.main import app
 
 
 @pytest.fixture(scope="module")
 def client() -> TestClient:
-    return TestClient(fastapi_app)
+    return TestClient(app)
 
 
 @pytest.mark.parametrize("version", ("v1",))
