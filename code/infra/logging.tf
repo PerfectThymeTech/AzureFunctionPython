@@ -121,3 +121,29 @@ resource "azurerm_monitor_private_link_scoped_service" "mpls_log_analytics_works
   scope_name          = azurerm_monitor_private_link_scope.mpls.name
   linked_resource_id  = azurerm_log_analytics_workspace.log_analytics_workspace.id
 }
+
+resource "azurerm_private_endpoint" "mpls_private_endpoint" {
+  name                = "${azurerm_monitor_private_link_scope.mpls.name}-pe"
+  location            = var.location
+  resource_group_name = azurerm_monitor_private_link_scope.mpls.resource_group_name
+  tags                = var.tags
+
+  custom_network_interface_name = "${azurerm_monitor_private_link_scope.mpls.name}-nic"
+  private_service_connection {
+    name                           = "${azurerm_monitor_private_link_scope.mpls.name}-pe"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_monitor_private_link_scope.mpls.id
+    subresource_names              = ["azuremonitor"]
+  }
+  subnet_id = azapi_resource.subnet_services.id
+  private_dns_zone_group {
+    name = "${azurerm_monitor_private_link_scope.mpls.name}-arecord"
+    private_dns_zone_ids = [
+      var.private_dns_zone_id_monitor,
+      var.private_dns_zone_id_oms_opinsights,
+      var.private_dns_zone_id_ods_opinsights,
+      var.private_dns_zone_id_automation_agents,
+      var.private_dns_zone_id_blob
+    ]
+  }
+}
