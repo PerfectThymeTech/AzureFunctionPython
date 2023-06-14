@@ -38,8 +38,7 @@ def setup_tracer(app: FastAPI):
     if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
         credential = DefaultAzureCredential()
         exporter = AzureMonitorTraceExporter.from_connection_string(
-            settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
-            credential=credential
+            settings.APPLICATIONINSIGHTS_CONNECTION_STRING, credential=credential
         )
         tracer = TracerProvider(resource=Resource({SERVICE_NAME: "api"}))
         tracer.add_span_processor(BatchSpanProcessor(exporter))
