@@ -1,6 +1,7 @@
 import logging
 from logging import Logger
 
+from azure.identity import DefaultAzureCredential
 from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
 from fastapi import FastAPI
 from fastapp.core.config import settings
@@ -35,8 +36,10 @@ def setup_tracer(app: FastAPI):
     RETURNS (None): Nothing is being returned.
     """
     if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
+        credential = DefaultAzureCredential()
         exporter = AzureMonitorTraceExporter.from_connection_string(
-            settings.APPLICATIONINSIGHTS_CONNECTION_STRING
+            settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
+            credential=credential
         )
         tracer = TracerProvider(resource=Resource({SERVICE_NAME: "api"}))
         tracer.add_span_processor(BatchSpanProcessor(exporter))
