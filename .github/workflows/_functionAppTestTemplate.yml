@@ -32,6 +32,9 @@ jobs:
         with:
           python-version: ${{ inputs.python_version }}
           cache: "pip"
+          cache-dependency-path: |
+            code/function/requirements.txt
+            requirements.txt
 
       # Run Python Tests
       - name: Run Python Tests
