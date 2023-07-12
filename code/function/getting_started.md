@@ -1,6 +1,5 @@
 # Getting Started with Azure Functions in Python
 
-
 ## Python Programming Model V2
 
 The new programming model in Azure Functions Python delivers an experience that aligns with Python development principles, and subsequently with commonly used Python frameworks.
