@@ -43,6 +43,11 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
+      # Check Out Repository
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v3
+
       # Setup Python 3.10
       - name: Setup Python 3.10
         id: python_setup
@@ -50,11 +55,6 @@ jobs:
         with:
           python-version: ${{ inputs.python_version }}
           cache: "pip"
-
-      # Check Out Repository
-      - name: Check Out Repository
-        id: checkout_repository
-        uses: actions/checkout@v3
 
       # Install Function Dependencies
       - name: Resolve Function Dependencies
