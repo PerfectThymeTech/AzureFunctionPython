@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
         default="", env="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
+    MY_SECRET_CONFIG: str = Field(default="", env="MY_SECRET_CONFIG")
 
 
 settings = Settings()

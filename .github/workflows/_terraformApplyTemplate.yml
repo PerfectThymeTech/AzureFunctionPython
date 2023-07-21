@@ -29,6 +29,9 @@ on:
       SUBSCRIPTION_ID:
         required: true
         description: "Specifies the client id."
+      MY_SAMPLE_SECRET:
+        required: true
+        description: "Specifies a sample secret."
 
 permissions:
   id-token: write
@@ -79,4 +82,4 @@ jobs:
       - name: Terraform Apply
         working-directory: ${{ inputs.working_directory }}
         run: |
-          terraform apply -var-file vars.${{ inputs.environment }}.tfvars -auto-approve -input=false
+          terraform apply -var-file vars.${{ inputs.environment }}.tfvars -var='my_secret=${{ secrets.MY_SAMPLE_SECRET }}' -auto-approve -input=false

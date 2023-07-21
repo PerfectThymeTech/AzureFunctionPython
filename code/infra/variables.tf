@@ -83,6 +83,16 @@ variable "function_health_path" {
   }
 }
 
+variable "my_secret" {
+  description = "Specifies a random secret value used in teh Logic App."
+  type        = string
+  sensitive   = true
+  validation {
+    condition     = length(var.my_secret) >= 2
+    error_message = "Please specify a valid resource ID."
+  }
+}
+
 variable "private_dns_zone_id_blob" {
   description = "Specifies the resource ID of the private DNS zone for Azure Storage blob endpoints. Not required if DNS A-records get created via Azue Policy."
   type        = string
