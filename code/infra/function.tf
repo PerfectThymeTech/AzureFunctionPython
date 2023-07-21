@@ -12,6 +12,41 @@ resource "azurerm_service_plan" "service_plan" {
   zone_balancing_enabled   = false # Update to 'true' for production
 }
 
+data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_service_plan" {
+  resource_id = azurerm_service_plan.service_plan.id
+}
+
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" {
+  name                       = "logAnalytics"
+  target_resource_id         = azurerm_service_plan.service_plan.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+
+  dynamic "enabled_log" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.log_category_groups
+    content {
+      category_group = entry.value
+      retention_policy {
+        enabled = true
+        days    = 30
+      }
+    }
+  }
+
+  dynamic "metric" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.metrics
+    content {
+      category = entry.value
+      enabled  = true
+      retention_policy {
+        enabled = true
+        days    = 30
+      }
+    }
+  }
+}
+
 resource "azapi_resource" "function" {
   type      = "Microsoft.Web/sites@2022-09-01"
   parent_id = azurerm_resource_group.app_rg.id
