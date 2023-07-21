@@ -6,6 +6,7 @@ on:
     paths:
       - "**.py"
       - "code/function/**"
+      - ".github/workflows/functionApp.yml"
 
   pull_request:
     branches:
@@ -13,6 +14,7 @@ on:
     paths:
       - "**.py"
       - "code/function/**"
+      - ".github/workflows/functionApp.yml"
 
 jobs:
   function_test:
@@ -26,7 +28,7 @@ jobs:
     uses: ./.github/workflows/_functionAppDeployTemplate.yml
     name: "Function App Deploy"
     needs: [function_test]
-    if: github.event_name == 'push' || github.event_name == 'release'
+    # if: github.event_name == 'push' || github.event_name == 'release'
     with:
       environment: "dev"
       python_version: "3.10"
