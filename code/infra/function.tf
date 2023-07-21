@@ -8,8 +8,8 @@ resource "azurerm_service_plan" "service_plan" {
   os_type                  = "Linux"
   per_site_scaling_enabled = false
   sku_name                 = "P1v3"
-  worker_count             = 3
-  zone_balancing_enabled   = true
+  worker_count             = 1     # Update to '3' for production
+  zone_balancing_enabled   = false # Update to 'true' for production
 }
 
 resource "azapi_resource" "function" {
