@@ -29,6 +29,9 @@ on:
       SUBSCRIPTION_ID:
         required: true
         description: "Specifies the client id."
+      MY_SAMPLE_SECRET:
+        required: true
+        description: "Specifies a sample secret."
 
 permissions:
   id-token: write
@@ -89,7 +92,7 @@ jobs:
         id: terraform_plan
         working-directory: ${{ inputs.working_directory }}
         run: |
-          terraform plan -var-file vars.${{ inputs.environment }}.tfvars -input=false
+          terraform plan -var-file vars.${{ inputs.environment }}.tfvars -var='my_secret=${{ secrets.MY_SAMPLE_SECRET }}' -input=false
 
       # Add Pull Request Comment
       - name: Add Pull Request Comment

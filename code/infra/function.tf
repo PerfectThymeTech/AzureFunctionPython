@@ -122,6 +122,10 @@ resource "azapi_resource" "function" {
           {
             name  = "AzureWebJobsStorage__accountName"
             value = azurerm_storage_account.storage.name
+          },
+          {
+            name  = "MY_SECRET_CONFIG"
+            value = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_sample.id})"
           }
         ]
         azureStorageAccounts                   = {}

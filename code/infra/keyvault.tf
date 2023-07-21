@@ -22,6 +22,19 @@ resource "azurerm_key_vault" "key_vault" {
   tenant_id                     = data.azurerm_client_config.current.tenant_id
 }
 
+resource "azurerm_key_vault_secret" "key_vault_secret_sample" {
+  name         = "MySampleSecret"
+  key_vault_id = azurerm_key_vault.key_vault.id
+
+  content_type = "text/plain"
+  value        = var.my_secret
+
+  depends_on = [
+    azurerm_role_assignment.current_role_assignment_key_vault,
+    azurerm_private_endpoint.key_vault_private_endpoint
+  ]
+}
+
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_key_vault" {
   resource_id = azurerm_key_vault.key_vault.id
 }
