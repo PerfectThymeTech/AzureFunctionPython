@@ -4,7 +4,7 @@
 
 # azure-identity~=1.13.0
 azure-functions~=1.15.0
-fastapi~=0.100.0
+fastapi~=0.100.1
 pydantic-settings~=2.0.2
 aiohttp~=3.8.4
 opentelemetry-instrumentation-fastapi==0.39b0
