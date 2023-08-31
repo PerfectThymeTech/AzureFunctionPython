@@ -3,7 +3,7 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 # azure-identity~=1.13.0
-azure-functions~=1.15.0
+azure-functions~=1.17.0
 fastapi~=0.103.0
 pydantic-settings~=2.0.3
 aiohttp~=3.8.5
