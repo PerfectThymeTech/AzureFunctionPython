@@ -7,5 +7,5 @@ azure-functions~=1.17.0
 fastapi~=0.103.2
 pydantic-settings~=2.0.3
 aiohttp~=3.8.5
-opentelemetry-instrumentation-fastapi==0.40b0
+opentelemetry-instrumentation-fastapi==0.41b0
 azure-monitor-opentelemetry-exporter==1.0.0b16
