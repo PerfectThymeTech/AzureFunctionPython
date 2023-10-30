@@ -21,6 +21,19 @@ jobs:
     with:
       python_version: "3.10"
       function_directory: "./code/function"
+  
+  function_container:
+    uses: ./.github/workflows/_containerTemplate.yml
+    name: "Function App Container"
+    needs: [function_test]
+    with:
+      environment: "dev"
+      working_directory: "./code/function"
+      registry_uri: "ghcr.io"
+      image_name: "AzureFunctionPython"
+    secrets:
+      USER_NAME: ${{ github.actor }}
+      PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
   function_deploy:
     uses: ./.github/workflows/_functionAppDeployTemplate.yml
