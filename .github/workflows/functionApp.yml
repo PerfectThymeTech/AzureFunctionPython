@@ -10,9 +10,9 @@ on:
   pull_request:
     branches:
       - main
-    # paths:
-    #   - "**.py"
-    #   - "code/function/**"
+    paths:
+      - "**.py"
+      - "code/function/**"
 
 jobs:
   function_test:
