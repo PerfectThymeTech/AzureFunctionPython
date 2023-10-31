@@ -30,6 +30,7 @@ jobs:
       environment: "dev"
       working_directory: "./code/function"
       registry_uri: "ghcr.io"
+      image_namespace_name: "PerfectThymeTech"
       image_name: "AzureFunctionPython"
     secrets:
       USER_NAME: ${{ github.actor }}
