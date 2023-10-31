@@ -21,7 +21,7 @@ jobs:
     with:
       python_version: "3.10"
       function_directory: "./code/function"
-  
+
   function_container:
     uses: ./.github/workflows/_containerTemplate.yml
     name: "Function App Container"

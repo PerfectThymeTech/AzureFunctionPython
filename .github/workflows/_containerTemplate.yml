@@ -32,7 +32,7 @@ on:
 
 jobs:
   deployment:
-    name: Function App Deploy
+    name: Container Build & Push
     runs-on: ubuntu-latest
     continue-on-error: false
     environment: ${{ inputs.environment }}
@@ -50,12 +50,12 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           cosign-release: 'v2.2.0'
-      
+
       # Install QEMU
       - name: Set up QEMU
         id: install_qemu
         uses: docker/setup-qemu-action@v3
-      
+
       # Install BuildKit
       - name: Install Buildx
         id: install_buildx
@@ -91,7 +91,7 @@ jobs:
         uses: docker/build-push-action@v5.0.0
         with:
           context: ${{ inputs.working_directory }}
-          file: ./Dockerfile
+          file: ${{ inputs.working_directory }}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
