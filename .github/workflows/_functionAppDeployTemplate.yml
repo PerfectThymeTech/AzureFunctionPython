@@ -63,10 +63,12 @@ jobs:
         id: function_dependencies
         shell: bash
         run: |
-          pushd '${{ inputs.function_directory }}'
+          pushd "${FUNCTION_DIRECTORY}"
           python -m pip install --upgrade pip
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
+        env:
+          FUNCTION_DIRECTORY: ${{ inputs.function_directory }}
 
       # Login to Azure
       - name: Azure Login

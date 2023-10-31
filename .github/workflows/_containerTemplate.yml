@@ -41,6 +41,11 @@ jobs:
     continue-on-error: false
     environment: ${{ inputs.environment }}
 
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
     steps:
       # Check Out Repository
       - name: Check Out Repository
@@ -108,8 +113,7 @@ jobs:
         id: sign
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+          cosign sign --yes "${TAGS}@${DIGEST}"
         env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.metadata.outputs.tags }}
           DIGEST: ${{ steps.build_push.outputs.digest }}

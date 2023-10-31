@@ -92,7 +92,10 @@ jobs:
         id: terraform_plan
         working-directory: ${{ inputs.working_directory }}
         run: |
-          terraform plan -var-file vars.${{ inputs.environment }}.tfvars -var='my_secret=${{ secrets.MY_SAMPLE_SECRET }}' -input=false
+          terraform plan -var-file="vars.${ENVIRONMENT}.tfvars" -var="my_secret=${MY_SAMPLE_SECRET}" -input=false
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          MY_SAMPLE_SECRET: ${{ secrets.MY_SAMPLE_SECRET }}
 
       # Add Pull Request Comment
       - name: Add Pull Request Comment

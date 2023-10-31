@@ -82,4 +82,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ${{ inputs.working_directory }}
         run: |
-          terraform apply -var-file vars.${{ inputs.environment }}.tfvars -var='my_secret=${{ secrets.MY_SAMPLE_SECRET }}' -auto-approve -input=false
+          terraform apply -var-file="vars.${ENVIRONMENT}.tfvars" -var="my_secret=${MY_SAMPLE_SECRET}" -auto-approve -input=false
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          MY_SAMPLE_SECRET: ${{ secrets.MY_SAMPLE_SECRET }}
