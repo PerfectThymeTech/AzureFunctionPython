@@ -40,6 +40,8 @@ jobs:
       - name: Run Python Tests
         id: python_test
         run: |
-          pip install -r ${{ inputs.function_directory }}/requirements.txt -q
+          pip install -r "${FUNCTION_DIRECTORY}/requirements.txt" -q
           pip install -r requirements.txt -q
           pytest
+        env:
+          FUNCTION_DIRECTORY: ${{ inputs.function_directory }}
