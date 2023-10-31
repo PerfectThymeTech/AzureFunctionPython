@@ -18,6 +18,10 @@ on:
         type: string
         default: ghcr.io
         description: "Specifies the uri of the container registry."
+      image_namespace_name:
+        required: true
+        type: string
+        description: "Specifies the namespace name of the image."
       image_name:
         required: true
         type: string
@@ -78,7 +82,7 @@ jobs:
         with:
           context: workflow
           images: |
-            ${{ inputs.registry_uri }}/${{ inputs.image_name }}
+            ${{ inputs.registry_uri }}/${{ inputs.image_namespace_name }}/${{ inputs.image_name }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
