@@ -51,7 +51,7 @@ jobs:
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.1.2
         id: install_cosign
-        if: github.event_name != 'pull_request'
+        # if: github.event_name != 'pull_request'
         with:
           cosign-release: 'v2.2.0'
 
@@ -69,7 +69,7 @@ jobs:
       - name: Login Container Registry
         uses: docker/login-action@v3.0.0
         id: registry_login
-        if: github.event_name != 'pull_request'
+        # if: github.event_name != 'pull_request'
         with:
           registry: ${{ inputs.registry_uri }}
           username: ${{ secrets.USER_NAME }}
@@ -106,7 +106,7 @@ jobs:
       # This step uses the identity token to provision an ephemeral certificate against the sigstore community Fulcio instance.
       - name: Sign container image
         id: sign
-        if: ${{ github.event_name != 'pull_request' }}
+        # if: ${{ github.event_name != 'pull_request' }}
         run: |
           echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
         env:
