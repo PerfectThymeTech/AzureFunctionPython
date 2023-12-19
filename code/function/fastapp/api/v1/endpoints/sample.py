@@ -20,6 +20,7 @@ async def post_predict(
     async with aiohttp.ClientSession() as client:
         async with client.get(url="https://www.bing.com/") as response:
             resp_status_code = response.status
+            resp_text = await response.text()
     logger.info(f"Received response status code: {resp_status_code}")
 
     return SampleResponse(output=f"Hello. Dependency Status Code: {resp_status_code}")
