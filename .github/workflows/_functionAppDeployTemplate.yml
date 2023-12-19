@@ -67,6 +67,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
+
+          echo "Install Azure CLI"
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
         env:
           FUNCTION_DIRECTORY: ${{ inputs.function_directory }}
 
