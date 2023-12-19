@@ -31,4 +31,4 @@ def test_post_sample(client, version):
 
     # assert
     assert response.status_code == 200
-    assert response.json() == {"output": "Hello Test"}
+    assert response.json() == {"output": "Hello. Dependency Status Code: 200"}
