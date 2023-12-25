@@ -26,10 +26,6 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" 
     for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.log_category_groups
     content {
       category_group = entry.value
-      retention_policy {
-        enabled = true
-        days    = 30
-      }
     }
   }
 
@@ -39,10 +35,6 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" 
     content {
       category = entry.value
       enabled  = true
-      retention_policy {
-        enabled = true
-        days    = 30
-      }
     }
   }
 }
@@ -168,10 +160,6 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
     for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_function.log_category_groups
     content {
       category_group = entry.value
-      retention_policy {
-        enabled = true
-        days    = 30
-      }
     }
   }
 
@@ -181,10 +169,6 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
     content {
       category = entry.value
       enabled  = true
-      retention_policy {
-        enabled = true
-        days    = 30
-      }
     }
   }
 }
