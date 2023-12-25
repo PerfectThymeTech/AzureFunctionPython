@@ -13,19 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Setup Python 3.10
-      - name: Setup Python 3.10
+      # Setup Python 3.11
+      - name: Setup Python 3.11
         id: python_setup
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       # Setup Terraform
       - name: Setup Terraform
         id: terraform_setup
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.4.6"
+          terraform_version: "1.6.6"
           terraform_wrapper: true
 
       # Checkout repository
