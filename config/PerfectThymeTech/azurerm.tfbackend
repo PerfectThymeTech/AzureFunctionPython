@@ -1,0 +1,7 @@
+environment          = "public"
+subscription_id      = "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
+resource_group_name  = "mycrp-prd-cicd"
+storage_account_name = "mycrpprdstg001"
+container_name       = "function"
+key                  = "terraform.tfstate"
+use_azuread_auth     = true

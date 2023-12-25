@@ -15,40 +15,17 @@ on:
       - "code/infra/**"
 
 jobs:
-  terraform_lint:
-    uses: ./.github/workflows/_terraformLintTemplate.yml
-    name: "Terraform Lint"
-    with:
-      terraform_version: "1.5.6"
-      working_directory: "./code/infra"
-
-  terraform_plan_dev:
-    uses: ./.github/workflows/_terraformPlanTemplate.yml
-    name: "Terraform Plan"
-    needs: [terraform_lint]
+  terraform_dev:
+    uses: ./.github/workflows/_terraformEnvironmentTemplate.yml
+    name: "Dev"
     with:
       environment: "dev"
-      terraform_version: "1.5.6"
+      config: "PerfectThymeTech"
+      terraform_version: "1.6.6"
       working_directory: "./code/infra"
+      tenant_id: "3556be79-2979-4b19-a1af-4dd4e6d9ed7e"
+      subscription_id: "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
     secrets:
-      TENANT_ID: ${{ secrets.TENANT_ID }}
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      MY_SAMPLE_SECRET: ${{ secrets.MY_SAMPLE_SECRET }}
-
-  terraform_apply_dev:
-    uses: ./.github/workflows/_terraformApplyTemplate.yml
-    name: "Terraform Apply"
-    needs: [terraform_plan_dev]
-    if: github.event_name == 'push' || github.event_name == 'release'
-    with:
-      environment: "dev"
-      terraform_version: "1.5.6"
-      working_directory: "./code/infra"
-    secrets:
-      TENANT_ID: ${{ secrets.TENANT_ID }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       MY_SAMPLE_SECRET: ${{ secrets.MY_SAMPLE_SECRET }}

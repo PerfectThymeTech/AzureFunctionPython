@@ -8,19 +8,17 @@ terraform {
     }
     azapi = {
       source  = "azure/azapi"
-      version = "1.10.0"
+      version = "1.11.0"
     }
   }
 
   backend "azurerm" {
     environment          = "public"
-    subscription_id      = "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
-    resource_group_name  = "mycrp-prd-cicd"
-    storage_account_name = "mycrpprdstg001"
-    container_name       = "function"
-    key                  = "terraform.tfstate"
+    resource_group_name  = "<provided-via-config>"
+    storage_account_name = "<provided-via-config>"
+    container_name       = "<provided-via-config>"
+    key                  = "<provided-via-config>"
     use_azuread_auth     = true
-    # use_oidc             = true
   }
 }
 
