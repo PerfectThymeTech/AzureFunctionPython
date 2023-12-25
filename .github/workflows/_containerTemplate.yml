@@ -1,4 +1,4 @@
-name: Docker Template
+name: Container Template
 
 on:
   workflow_call:
@@ -111,7 +111,7 @@ jobs:
       # This step uses the identity token to provision an ephemeral certificate against the sigstore community Fulcio instance.
       - name: Sign container image
         id: sign
-        if: ${{ github.event_name != 'pull_request' }}
+        if: github.event_name == 'release'
         run: |
           cosign sign --yes "${TAGS}@${DIGEST}"
         env:
