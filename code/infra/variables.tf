@@ -41,8 +41,8 @@ variable "function_container_image" {
   validation {
     condition = alltrue([
       length(var.function_container_image) > 2,
-      length(split("/", var.function_container_image)) > 2,
-      length(split(":", var.function_container_image)) > 2,
+      length(split("/", var.function_container_image)) >= 2,
+      length(split(":", var.function_container_image)) == 2,
     ])
     error_message = "Please specify a valid container image reference."
   }
