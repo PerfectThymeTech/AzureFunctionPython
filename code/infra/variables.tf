@@ -39,7 +39,7 @@ variable "function_container_registry_url" {
   type        = string
   sensitive   = false
   validation {
-    condition = startswith(var.function_container_registry_url, "https://")
+    condition     = startswith(var.function_container_registry_url, "https://")
     error_message = "Please specify a valid container image reference."
   }
 }
