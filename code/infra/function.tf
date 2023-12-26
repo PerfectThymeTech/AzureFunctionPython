@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "service_plan" {
   # maximum_elastic_worker_count = 20
   os_type                  = "Linux"
   per_site_scaling_enabled = false
-  sku_name                 = "P1v3"
+  sku_name                 = var.function_sku
   worker_count             = 1     # Update to '3' for production
   zone_balancing_enabled   = false # Update to 'true' for production
 }
@@ -50,7 +50,7 @@ resource "azapi_resource" "function" {
   }
 
   body = jsonencode({
-    kind = "functionapp,linux"
+    kind = "functionapp,linux,container"
     properties = {
       clientAffinityEnabled     = false
       clientCertEnabled         = false
@@ -64,14 +64,28 @@ resource "azapi_resource" "function" {
       publicNetworkAccess       = "Disabled"
       redundancyMode            = "None"
       reserved                  = true
-      scmSiteAlsoStopped        = false
+      scmSiteAlsoStopped        = true
       serverFarmId              = azurerm_service_plan.service_plan.id
       storageAccountRequired    = false
       vnetContentShareEnabled   = true
+      vnetImagePullEnabled      = true
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
       vnetRouteAllEnabled       = true
       siteConfig = {
-        autoHealEnabled            = false
+        autoHealEnabled = true
+        autoHealRules = {
+          actions = {
+            actionType = "LogEvent"
+          }
+          triggers = {
+            statusCodes = [
+              "429",
+              "504",
+              "507",
+              "508"
+            ]
+          }
+        }
         acrUseManagedIdentityCreds = false
         alwaysOn                   = true
         appSettings = [
@@ -80,8 +94,12 @@ resource "azapi_resource" "function" {
             value = azurerm_application_insights.application_insights.connection_string
           },
           {
-            name  = "APPINSIGHTS_INSTRUMENTATIONKEY"
-            value = azurerm_application_insights.application_insights.instrumentation_key
+            name  = "AZURE_FUNCTIONS_ENVIRONMENT"
+            value = "Production"
+          },
+          {
+            name  = "FUNCTIONS_WORKER_PROCESS_COUNT"
+            value = "${var.function_sku_cpus}"
           },
           {
             name  = "FUNCTIONS_EXTENSION_VERSION"
@@ -90,6 +108,22 @@ resource "azapi_resource" "function" {
           {
             name  = "FUNCTIONS_WORKER_RUNTIME"
             value = "python"
+          },
+          {
+            name  = "FUNCTIONS_WORKER_SHARED_MEMORY_DATA_TRANSFER_ENABLED"
+            value = "1"
+          },
+          {
+            name  = "DOCKER_SHM_SIZE"
+            value = "268435456"
+          },
+          {
+            name  = "PYTHON_THREADPOOL_THREAD_COUNT"
+            value = "None"
+          },
+          {
+            name  = "PYTHON_ENABLE_DEBUG_LOGGING"
+            value = "0"
           },
           {
             name  = "WEBSITE_CONTENTOVERVNET"
@@ -116,6 +150,14 @@ resource "azapi_resource" "function" {
             value = azurerm_storage_account.storage.name
           },
           {
+            name  = "AzureWebJobsSecretStorageType"
+            value = "keyvault"
+          },
+          {
+            name  = "AzureWebJobsSecretStorageKeyVaultUri"
+            value = azurerm_key_vault.key_vault.vault_uri
+          },
+          {
             name  = "MY_SECRET_CONFIG"
             value = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_sample.id})"
           }
@@ -126,15 +168,18 @@ resource "azapi_resource" "function" {
         functionsRuntimeScaleMonitoringEnabled = false
         ftpsState                              = "Disabled"
         healthCheckPath                        = var.function_health_path
-        http20Enabled                          = false
+        http20Enabled                          = true
         ipSecurityRestrictionsDefaultAction    = "Deny"
-        linuxFxVersion                         = "Python|${var.function_python_version}"
+        linuxFxVersion                         = "DOCKER|${var.function_container_image}"
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
+        minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
         minimumElasticInstanceCount            = 0
         numberOfWorkers                        = 1
         preWarmedInstanceCount                 = 0
+        remoteDebuggingEnabled                 = false
+        requestTracingEnabled                  = true
         scmMinTlsVersion                       = "1.2"
         scmIpSecurityRestrictionsUseMain       = false
         scmIpSecurityRestrictionsDefaultAction = "Deny"
@@ -144,6 +189,18 @@ resource "azapi_resource" "function" {
       }
     }
   })
+  
+  schema_validation_enabled = false
+  # ignore_body_changes = [
+  #   "properties.siteConfig.appSettings"
+  # ]
+  depends_on = [
+    azurerm_private_endpoint.key_vault_private_endpoint,
+    azurerm_private_endpoint.storage_private_endpoint_blob,
+    azurerm_private_endpoint.storage_private_endpoint_file,
+    azurerm_private_endpoint.storage_private_endpoint_queue,
+    azurerm_private_endpoint.storage_private_endpoint_table,
+  ]
 }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_function" {
