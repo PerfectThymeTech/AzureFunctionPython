@@ -39,11 +39,11 @@ variable "function_container_image" {
   type        = string
   sensitive   = false
   validation {
-    condition = alltrue(
+    condition = alltrue([
       length(var.function_container_image) > 2,
       length(split("/", var.function_container_image)) > 2,
       length(split(":", var.function_container_image)) > 2,
-    )
+    ])
     error_message = "Please specify a valid container image reference."
   }
 }
