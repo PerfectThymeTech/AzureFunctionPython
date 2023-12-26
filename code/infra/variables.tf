@@ -34,6 +34,16 @@ variable "tags" {
 }
 
 # Function variables
+variable "function_container_registry_url" {
+  description = "Specifies the container image reference of the Azure Function."
+  type        = string
+  sensitive   = false
+  validation {
+    condition = startswith(var.function_container_registry_url, "https://")
+    error_message = "Please specify a valid container image reference."
+  }
+}
+
 variable "function_container_image" {
   description = "Specifies the container image reference of the Azure Function."
   type        = string

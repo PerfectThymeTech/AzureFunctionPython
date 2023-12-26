@@ -118,6 +118,10 @@ resource "azapi_resource" "function" {
             value = "268435456"
           },
           {
+            name  = "DOCKER_REGISTRY_SERVER_URL"
+            value = var.function_container_registry_url
+          },
+          {
             name  = "PYTHON_THREADPOOL_THREAD_COUNT"
             value = "None"
           },
@@ -132,6 +136,10 @@ resource "azapi_resource" "function" {
           {
             name  = "WEBSITE_RUN_FROM_PACKAGE"
             value = "0"
+          },
+          {
+            name  = "WEBSITES_ENABLE_APP_SERVICE_STORAGE"
+            value = "false"
           },
           {
             name  = "PYTHON_ENABLE_WORKER_EXTENSIONS"
