@@ -21,19 +21,21 @@ on:
         required: true
         type: string
         description: "Specifies the name of the Azure Function."
-    secrets:
-      TENANT_ID:
+      tenant_id:
         required: true
+        type: string
         description: "Specifies the tenant id of the deployment."
+      subscription_id:
+        required: true
+        type: string
+        description: "Specifies the subscription id of the deployment."
+    secrets:
       CLIENT_ID:
         required: true
         description: "Specifies the client id."
       CLIENT_SECRET:
         required: true
         description: "Specifies the client secret."
-      SUBSCRIPTION_ID:
-        required: true
-        description: "Specifies the client id."
 
 jobs:
   deployment:
@@ -75,7 +77,7 @@ jobs:
         id: azure_login
         uses: azure/login@v1
         with:
-          creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+          creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ inputs.subscription_id }}","tenantId":"${{ inputs.tenant_id }}"}'
 
       # Deploy Function
       - name: Deploy Function

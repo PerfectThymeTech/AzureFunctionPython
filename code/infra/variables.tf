@@ -1,3 +1,4 @@
+# General variables
 variable "location" {
   description = "Specifies the location for all Azure resources."
   type        = string
@@ -32,6 +33,66 @@ variable "tags" {
   default     = {}
 }
 
+# Function variables
+variable "function_container_image" {
+  description = "Specifies the container image reference of the Azure Function."
+  type        = string
+  sensitive   = false
+  validation {
+    condition = alltrue([
+      length(var.function_container_image) > 2,
+      length(split("/", var.function_container_image)) >= 2,
+      length(split(":", var.function_container_image)) == 2,
+    ])
+    error_message = "Please specify a valid container image reference."
+  }
+}
+
+variable "function_sku" {
+  description = "Specifies the sku name used in the function app service plan."
+  type        = string
+  sensitive   = false
+  nullable    = false
+  default     = "P0v3"
+  validation {
+    condition     = contains(["F1", "B1", "B2", "B3", "S1", "S2", "S3", "P0v3", "P1v3", "P2v3", "P3v3", "P1mv3", "P2mv3", "P3mv3", "P4mv3", "P5mv3"], var.function_sku)
+    error_message = "Please specify a valid sku name."
+  }
+}
+
+variable "function_sku_cpus" {
+  description = "Specifies the number of CPUs available for the function sku used in the app service plan."
+  type        = number
+  sensitive   = false
+  nullable    = false
+  default     = 1
+  validation {
+    condition     = var.function_sku_cpus > 0
+    error_message = "Please specify a valid number of cpus."
+  }
+}
+
+variable "function_health_path" {
+  description = "Specifies the health endpoint of the Azure Function."
+  type        = string
+  sensitive   = false
+  validation {
+    condition     = startswith(var.function_health_path, "/")
+    error_message = "Please specify a valid path."
+  }
+}
+
+variable "my_secret" {
+  description = "Specifies a random secret value used in teh Logic App."
+  type        = string
+  sensitive   = true
+  validation {
+    condition     = length(var.my_secret) >= 2
+    error_message = "Please specify a valid resource ID."
+  }
+}
+
+# Network variables
 variable "vnet_id" {
   description = "Specifies the resource ID of the Vnet used for the Azure Function."
   type        = string
@@ -62,37 +123,7 @@ variable "route_table_id" {
   }
 }
 
-variable "function_python_version" {
-  description = "Specifies the python version of the Azure Function."
-  type        = string
-  sensitive   = false
-  default     = "3.10"
-  validation {
-    condition     = contains(["3.9", "3.10"], var.function_python_version)
-    error_message = "Please specify a valid Python version."
-  }
-}
-
-variable "function_health_path" {
-  description = "Specifies the health endpoint of the Azure Function."
-  type        = string
-  sensitive   = false
-  validation {
-    condition     = startswith(var.function_health_path, "/")
-    error_message = "Please specify a valid path."
-  }
-}
-
-variable "my_secret" {
-  description = "Specifies a random secret value used in teh Logic App."
-  type        = string
-  sensitive   = true
-  validation {
-    condition     = length(var.my_secret) >= 2
-    error_message = "Please specify a valid resource ID."
-  }
-}
-
+# DNS variables
 variable "private_dns_zone_id_blob" {
   description = "Specifies the resource ID of the private DNS zone for Azure Storage blob endpoints. Not required if DNS A-records get created via Azue Policy."
   type        = string
