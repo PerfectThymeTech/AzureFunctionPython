@@ -2,10 +2,11 @@
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
 
-# azure-identity~=1.13.0
+# azure-identity~=1.15.0
 azure-functions~=1.17.0
 fastapi~=0.106.0
 pydantic-settings~=2.1.0
 aiohttp~=3.9.1
 opentelemetry-instrumentation-fastapi==0.43b0
+opentelemetry-instrumentation-aiohttp-client~=0.43b0
 azure-monitor-opentelemetry-exporter==1.0.0b19

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapp.api.v1.api_v1 import api_v1_router
 from fastapp.core.config import settings
-from fastapp.utils import setup_tracer
+from fastapp.utils import setup_opentelemetry
 
 
 def get_app() -> FastAPI:
@@ -25,7 +25,7 @@ app = get_app()
 @app.on_event("startup")
 async def startup_event():
     """Gracefully start the application before the server reports readiness."""
-    setup_tracer(app=app)
+    setup_opentelemetry(app=app)
 
 
 @app.on_event("shutdown")
