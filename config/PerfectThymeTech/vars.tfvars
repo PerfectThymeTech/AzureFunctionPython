@@ -6,7 +6,7 @@ tags        = {}
 
 # Function variables
 function_container_registry_url = "https://ghcr.io"
-function_container_image        = "ghcr.io/perfectthymetech/azurefunctionpython:pr-91"
+function_container_image        = "ghcr.io/perfectthymetech/azurefunctionpython:main"
 function_sku                    = "P0v3"
 function_sku_cpus               = 1
 function_health_path            = "/v1/health/heartbeat"
