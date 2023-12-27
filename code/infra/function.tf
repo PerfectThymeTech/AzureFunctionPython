@@ -72,7 +72,7 @@ resource "azapi_resource" "function" {
       vnetRouteAllEnabled       = true
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
       siteConfig = {
-        # autoHealEnabled = true
+        # autoHealEnabled = true # Enable to auto heal app based on configs
         # autoHealRules = {
         #   actions = {
         #     actionType = "LogEvent"
@@ -182,7 +182,7 @@ resource "azapi_resource" "function" {
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
-        # minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+        minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
         minimumElasticInstanceCount            = 0
         numberOfWorkers                        = 1
         preWarmedInstanceCount                 = 0
