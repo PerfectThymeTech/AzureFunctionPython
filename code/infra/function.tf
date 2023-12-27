@@ -69,7 +69,7 @@ resource "azapi_resource" "function" {
       storageAccountRequired    = false
       vnetContentShareEnabled   = true
       vnetImagePullEnabled      = false # Set to 'true' when pulling image from private Azure Container Registry
-      vnetRouteAllEnabled       = true      
+      vnetRouteAllEnabled       = true
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
       siteConfig = {
         # autoHealEnabled = true
