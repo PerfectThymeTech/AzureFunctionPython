@@ -68,24 +68,24 @@ resource "azapi_resource" "function" {
       serverFarmId              = azurerm_service_plan.service_plan.id
       storageAccountRequired    = false
       vnetContentShareEnabled   = true
-      vnetImagePullEnabled      = true
-      virtualNetworkSubnetId    = azapi_resource.subnet_function.id
+      vnetImagePullEnabled      = false # Set to 'true' when pulling image from private Azure Container Registry
       vnetRouteAllEnabled       = true
+      virtualNetworkSubnetId    = azapi_resource.subnet_function.id
       siteConfig = {
-        autoHealEnabled = true
-        autoHealRules = {
-          actions = {
-            actionType = "LogEvent"
-          }
-          triggers = {
-            statusCodes = [
-              "429",
-              "504",
-              "507",
-              "508"
-            ]
-          }
-        }
+        # autoHealEnabled = true # Enable to auto heal app based on configs
+        # autoHealRules = {
+        #   actions = {
+        #     actionType = "LogEvent"
+        #   }
+        #   triggers = {
+        #     statusCodes = [
+        #       "429",
+        #       "504",
+        #       "507",
+        #       "508"
+        #     ]
+        #   }
+        # }
         acrUseManagedIdentityCreds = false
         alwaysOn                   = true
         appSettings = [
@@ -106,44 +106,12 @@ resource "azapi_resource" "function" {
             value = "~4"
           },
           {
-            name  = "FUNCTIONS_WORKER_RUNTIME"
-            value = "python"
-          },
-          {
-            name  = "FUNCTIONS_WORKER_SHARED_MEMORY_DATA_TRANSFER_ENABLED"
-            value = "1"
-          },
-          {
-            name  = "DOCKER_SHM_SIZE"
-            value = "268435456"
-          },
-          {
-            name  = "PYTHON_THREADPOOL_THREAD_COUNT"
-            value = "None"
-          },
-          {
-            name  = "PYTHON_ENABLE_DEBUG_LOGGING"
-            value = "0"
-          },
-          {
             name  = "WEBSITE_CONTENTOVERVNET"
             value = "1"
           },
           {
             name  = "WEBSITE_RUN_FROM_PACKAGE"
             value = "0"
-          },
-          {
-            name  = "PYTHON_ENABLE_WORKER_EXTENSIONS"
-            value = "1"
-          },
-          {
-            name  = "ENABLE_ORYX_BUILD"
-            value = "1"
-          },
-          {
-            name  = "SCM_DO_BUILD_DURING_DEPLOYMENT"
-            value = "1"
           },
           {
             name  = "AzureWebJobsStorage__accountName"
@@ -157,6 +125,46 @@ resource "azapi_resource" "function" {
             name  = "AzureWebJobsSecretStorageKeyVaultUri"
             value = azurerm_key_vault.key_vault.vault_uri
           },
+          {
+            name  = "WEBSITES_ENABLE_APP_SERVICE_STORAGE" # Disable when not running a container
+            value = "false"
+          },
+          {
+            name  = "DOCKER_REGISTRY_SERVER_URL" # Disable when not running a container
+            value = var.function_container_registry_url
+          },
+          # {
+          #   name  = "FUNCTIONS_WORKER_RUNTIME" # Enable when running Python directly on the Function host
+          #   value = "python"
+          # },
+          # {
+          #   name  = "FUNCTIONS_WORKER_SHARED_MEMORY_DATA_TRANSFER_ENABLED" # Enable when running Python directly on the Function host
+          #   value = "1"
+          # },
+          # {
+          #   name  = "DOCKER_SHM_SIZE" # Enable when running Python directly on the Function host
+          #   value = "268435456"
+          # },
+          # {
+          #   name  = "PYTHON_THREADPOOL_THREAD_COUNT" # Enable when running Python directly on the Function host
+          #   value = "None"
+          # },
+          # {
+          #   name  = "PYTHON_ENABLE_DEBUG_LOGGING" # Enable when running Python directly on the Function host
+          #   value = "0"
+          # },
+          # {
+          #   name  = "PYTHON_ENABLE_WORKER_EXTENSIONS" # Enable when running Python directly on the Function host
+          #   value = "1"
+          # },
+          # {
+          #   name  = "ENABLE_ORYX_BUILD" # Enable when running Python directly on the Function host
+          #   value = "1"
+          # },
+          # {
+          #   name  = "SCM_DO_BUILD_DURING_DEPLOYMENT" # Enable when running Python directly on the Function host
+          #   value = "1"
+          # },
           {
             name  = "MY_SECRET_CONFIG"
             value = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_sample.id})"

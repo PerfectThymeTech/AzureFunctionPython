@@ -5,10 +5,11 @@ prefix      = "myfunc"
 tags        = {}
 
 # Function variables
-function_container_image = "ghcr.io/perfectthymetech/azurefunctionpython:main"
-function_sku             = "P0v3"
-function_sku_cpus        = 1
-function_health_path     = "/v1/health/heartbeat"
+function_container_registry_url = "https://ghcr.io"
+function_container_image        = "ghcr.io/perfectthymetech/azurefunctionpython:main"
+function_sku                    = "P0v3"
+function_sku_cpus               = 1
+function_health_path            = "/v1/health/heartbeat"
 
 # Network variables
 vnet_id        = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-function-network-rg/providers/Microsoft.Network/virtualNetworks/mycrp-prd-function-vnet001"
