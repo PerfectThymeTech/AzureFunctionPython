@@ -69,23 +69,23 @@ resource "azapi_resource" "function" {
       storageAccountRequired    = false
       vnetContentShareEnabled   = true
       vnetImagePullEnabled      = false # Set to 'true' when pulling image from private Azure Container Registry
+      vnetRouteAllEnabled       = true      
       virtualNetworkSubnetId    = azapi_resource.subnet_function.id
-      vnetRouteAllEnabled       = true
       siteConfig = {
-        autoHealEnabled = true
-        autoHealRules = {
-          actions = {
-            actionType = "LogEvent"
-          }
-          triggers = {
-            statusCodes = [
-              "429",
-              "504",
-              "507",
-              "508"
-            ]
-          }
-        }
+        # autoHealEnabled = true
+        # autoHealRules = {
+        #   actions = {
+        #     actionType = "LogEvent"
+        #   }
+        #   triggers = {
+        #     statusCodes = [
+        #       "429",
+        #       "504",
+        #       "507",
+        #       "508"
+        #     ]
+        #   }
+        # }
         acrUseManagedIdentityCreds = false
         alwaysOn                   = true
         appSettings = [
@@ -182,7 +182,7 @@ resource "azapi_resource" "function" {
         localMySqlEnabled                      = false
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
-        minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+        # minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
         minimumElasticInstanceCount            = 0
         numberOfWorkers                        = 1
         preWarmedInstanceCount                 = 0
@@ -198,7 +198,7 @@ resource "azapi_resource" "function" {
     }
   })
 
-  schema_validation_enabled = false
+  # schema_validation_enabled = false
   # ignore_body_changes = [
   #   "properties.siteConfig.appSettings"
   # ]
