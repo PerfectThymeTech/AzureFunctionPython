@@ -198,7 +198,7 @@ resource "azapi_resource" "function" {
     }
   })
 
-  # schema_validation_enabled = false
+  schema_validation_enabled = false
   # ignore_body_changes = [
   #   "properties.siteConfig.appSettings"
   # ]
