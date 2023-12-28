@@ -19,7 +19,7 @@ async def post_predict(
 
     # Sample request
     async with httpx.AsyncClient() as client:
-        response = await client.get("https://www.bing.com/")
+        response = await client.get("https://www.bing.com")
     logger.info(f"Received response status code: {response.status_code}")
 
     return SampleResponse(output=f"Hello {data.input}")
