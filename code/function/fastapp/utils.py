@@ -3,30 +3,27 @@ from logging import Logger
 
 # from azure.identity import ManagedIdentityCredential
 from azure.monitor.opentelemetry.exporter import (
+    AzureMonitorLogExporter,
     AzureMonitorMetricExporter,
     AzureMonitorTraceExporter,
-    AzureMonitorLogExporter,
 )
 from fastapi import FastAPI
 from fastapp.core.config import settings
 from opentelemetry import trace
+from opentelemetry._logs import set_logger_provider
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
+from opentelemetry.metrics import set_meter_provider
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace import Tracer
-from opentelemetry.sdk._logs import (
-    LoggerProvider,
-    LoggingHandler,
-    set_logger_provider,
-)
-from opentelemetry.metrics import set_meter_provider
-from opentelemetry.trace import get_tracer_provider, set_tracer_provider
-from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
-from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
+from opentelemetry.trace import Tracer, get_tracer_provider, set_tracer_provider
+
 
 def setup_logging(module) -> Logger:
     """Setup logging and event handler.
@@ -74,7 +71,9 @@ def setup_opentelemetry(app: FastAPI):
             # credential=credential
         )
         logger_provider = LoggerProvider()
-        logger_provider.add_log_record_processor(BatchLogRecordProcessor(logger_exporter))
+        logger_provider.add_log_record_processor(
+            BatchLogRecordProcessor(logger_exporter)
+        )
         set_logger_provider(logger_provider)
 
         # Create tracer provider
@@ -96,7 +95,7 @@ def setup_opentelemetry(app: FastAPI):
         )
         meter_provider = MeterProvider(metric_readers=[reader])
         set_meter_provider(meter_provider)
-        
+
         # Configure custom metrics
         system_metrics_config = {
             "system.memory.usage": ["used", "free", "cached"],

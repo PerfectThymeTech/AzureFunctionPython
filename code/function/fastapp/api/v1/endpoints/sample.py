@@ -22,7 +22,7 @@ async def post_predict(data: SampleRequest, request: Request) -> SampleResponse:
             resp_status_code = response.status
             resp_text = await response.text()
     logger.info(f"Received response status code: {resp_status_code}")
-    
+
     # tracer_attributes = {"http.client_ip": request.client.host}
     # with tracer.start_as_current_span(
     #     "dependency_span", attributes=tracer_attributes
