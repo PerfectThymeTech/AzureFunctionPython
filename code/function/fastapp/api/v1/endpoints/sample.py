@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Annotated
 
 import aiohttp
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Header
 from fastapp.models.sample import SampleRequest, SampleResponse
 from fastapp.utils import setup_logging, setup_tracer
 from opentelemetry import trace
@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/sample", response_model=SampleResponse, name="sample")
-async def post_predict(data: SampleRequest, request: Request) -> SampleResponse:
+async def post_predict(data: SampleRequest, x_forwarded_for: Annotated[str, Header()] = "") -> SampleResponse:
     logger.info(f"Received request: {data}")
 
     # Sample request
@@ -23,7 +23,7 @@ async def post_predict(data: SampleRequest, request: Request) -> SampleResponse:
     #         resp_text = await response.text()
     # logger.info(f"Received response status code: {resp_status_code}")
 
-    tracer_attributes = {"http.client_ip": request.client.host}
+    tracer_attributes = {"http.client_ip": x_forwarded_for}
     with tracer.start_as_current_span(
         "dependency_span", attributes=tracer_attributes
     ) as span:
