@@ -15,23 +15,11 @@ router = APIRouter()
 async def post_predict(
     data: SampleRequest, x_forwarded_for: Annotated[str, Header()] = ""
 ) -> SampleResponse:
-    logger.info(f"Received request: {data}")
+    logger.info(f"Received request: '{data}' from ip '{x_forwarded_for}'")
 
     # Sample request
     async with httpx.AsyncClient() as client:
         response = await client.get("https://www.bing.com/")
-    # tracer_attributes = {"http.client_ip": x_forwarded_for}
-    # with tracer.start_as_current_span(
-    #     "dependency_span", attributes=tracer_attributes
-    # ) as span:
-    #     try:
-    #         async with aiohttp.ClientSession() as client:
-    #             async with client.get(url="https://www.bing.com/") as response:
-    #                 resp_status_code = response.status
-    #                 resp_text = await response.text()
-    #         logger.info(f"Received response status code: {resp_status_code}")
-    #     except Exception as ex:
-    #         span.set_attribute("status", "exception")
-    #         span.record_exception(ex)
+    logger.info(f"Received response status code: {response.status_code}")
 
     return SampleResponse(output=f"Hello {data.input}")
