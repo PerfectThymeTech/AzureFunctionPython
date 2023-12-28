@@ -9,4 +9,5 @@ pydantic-settings~=2.1.0
 aiohttp~=3.9.1
 opentelemetry-instrumentation-fastapi==0.43b0
 opentelemetry-instrumentation-aiohttp-client~=0.43b0
+opentelemetry-instrumentation-system-metrics~=0.43b0
 azure-monitor-opentelemetry-exporter==1.0.0b19
