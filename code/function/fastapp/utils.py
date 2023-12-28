@@ -1,6 +1,8 @@
 import logging
 from logging import Logger
 
+from azure.monitor.opentelemetry import configure_azure_monitor
+
 # from azure.identity import ManagedIdentityCredential
 from fastapi import FastAPI
 from fastapp.core.config import settings
@@ -8,7 +10,6 @@ from opentelemetry import trace
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
 from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
 from opentelemetry.trace import Tracer
-from azure.monitor.opentelemetry import configure_azure_monitor
 
 
 def setup_logging(module) -> Logger:
@@ -53,7 +54,7 @@ def setup_opentelemetry(app: FastAPI):
             disable_offline_storage=False,
             # credential=credential,
         )
-        
+
         # Configure custom metrics
         system_metrics_config = {
             "system.memory.usage": ["used", "free", "cached"],
