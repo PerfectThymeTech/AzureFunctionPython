@@ -9,7 +9,7 @@ from fastapp.core.config import settings
 from opentelemetry import trace
 from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
-from opentelemetry.trace import Tracer
+from opentelemetry.trace import Tracer, SpanKind
 
 
 def setup_logging(module) -> Logger:
@@ -35,7 +35,7 @@ def setup_tracer(module) -> Tracer:
 
     RETURNS (Tracer): The tracer object to create spans.
     """
-    tracer = trace.get_tracer(module)
+    tracer = trace.get_tracer(module, kind=SpanKind.CLIENT)
     return tracer
 
 
