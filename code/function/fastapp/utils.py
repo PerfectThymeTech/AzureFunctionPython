@@ -7,7 +7,7 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 from fastapi import FastAPI
 from fastapp.core.config import settings
 from opentelemetry import trace
-from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
+from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
 from opentelemetry.trace import Tracer
 
@@ -65,5 +65,5 @@ def setup_opentelemetry(app: FastAPI):
         }
 
         # Create instrumenter
-        AioHttpClientInstrumentor().instrument()
+        HTTPXClientInstrumentor().instrument()
         SystemMetricsInstrumentor(config=system_metrics_config).instrument()
