@@ -109,8 +109,8 @@ def setup_opentelemetry(app: FastAPI):
         FastAPIInstrumentor.instrument_app(
             app,
             excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
-            # tracer_provider=tracer_provider,
-            # meter_provider=meter_provider,
+            tracer_provider=tracer_provider,
+            meter_provider=meter_provider,
         )
-        AioHttpClientInstrumentor().instrument()  # tracer_provider=tracer_provider)
+        AioHttpClientInstrumentor().instrument(tracer_provider=tracer_provider)
         SystemMetricsInstrumentor(config=system_metrics_config).instrument()
