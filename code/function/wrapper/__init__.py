@@ -4,7 +4,7 @@ from fastapp.utils import setup_opentelemetry, setup_tracer
 from opentelemetry.context import attach, detach
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
-setup_opentelemetry(app=app)
+# setup_opentelemetry(app=app)
 tracer = setup_tracer(__name__)
 
 
