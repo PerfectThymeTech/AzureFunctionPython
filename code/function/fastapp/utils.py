@@ -103,7 +103,7 @@ def setup_opentelemetry(app: FastAPI):
         reader = PeriodicExportingMetricReader(
             metrics_exporter, export_interval_millis=5000
         )
-        meter_provider = MeterProvider(metric_readers=[reader])
+        meter_provider = MeterProvider(metric_readers=[reader], resource=resource)
         set_meter_provider(meter_provider)
 
         # Configure custom metrics
@@ -116,11 +116,11 @@ def setup_opentelemetry(app: FastAPI):
         }
 
         # Create instrumenter
-        FastAPIInstrumentor.instrument_app(
-            app,
-            excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
-            tracer_provider=tracer_provider,
-            meter_provider=meter_provider,
-        )
+        # FastAPIInstrumentor.instrument_app(
+        #     app,
+        #     excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
+        #     tracer_provider=tracer_provider,
+        #     meter_provider=meter_provider,
+        # )
         HTTPXClientInstrumentor().instrument()
         SystemMetricsInstrumentor(config=system_metrics_config).instrument()
