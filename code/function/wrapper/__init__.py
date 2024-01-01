@@ -20,7 +20,7 @@ async def main(req: func.HttpRequest, context: func.Context) -> func.HttpRespons
 
     # Function logic
     try:
-        with tracer.start_as_current_span('wrapper') as span:
+        with tracer.start_as_current_span("wrapper") as span:
             response = await func.AsgiMiddleware(app).handle_async(req, context)
     finally:
         # End distributed tracing
