@@ -130,7 +130,7 @@ def setup_opentelemetry(app: FastAPI):
         # Create instrumenter
         FastAPIInstrumentor.instrument_app(
             app,
-            excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
+            excluded_urls=f".*.in.applicationinsights.azure.com/.*,{settings.API_V1_STR}/health/heartbeat",
             tracer_provider=tracer_provider,
             meter_provider=meter_provider,
         )
