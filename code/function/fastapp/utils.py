@@ -4,12 +4,28 @@ from logging import Logger
 from azure.monitor.opentelemetry import configure_azure_monitor
 
 # from azure.identity import ManagedIdentityCredential
+from azure.monitor.opentelemetry.exporter import (
+    ApplicationInsightsSampler,
+    AzureMonitorLogExporter,
+    AzureMonitorMetricExporter,
+    AzureMonitorTraceExporter,
+)
 from fastapi import FastAPI
 from fastapp.core.config import settings
 from opentelemetry import trace
-from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.system_metrics import SystemMetricsInstrumentor
-from opentelemetry.trace import Tracer
+from opentelemetry.metrics import set_meter_provider
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.trace import Tracer, get_tracer_provider, set_tracer_provider
 
 
 def setup_logging(module) -> Logger:
@@ -47,13 +63,48 @@ def setup_opentelemetry(app: FastAPI):
     """
     if settings.APPLICATIONINSIGHTS_CONNECTION_STRING:
         # credential = ManagedIdentityCredential()
-
-        # Configure azure monitor exporter
-        configure_azure_monitor(
-            connection_string=settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
-            disable_offline_storage=False,
-            # credential=credential,
+        resource = Resource.create(
+            {
+                "service.name": settings.WEBSITE_NAME,
+                "service.instance.id": settings.WEBSITE_INSTANCE_ID,
+            }
         )
+
+        # Create logger provider
+        logger_exporter = AzureMonitorLogExporter.from_connection_string(
+            settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
+            # credential=credential
+        )
+        logger_provider = LoggerProvider(resource=resource)
+        logger_provider.add_log_record_processor(
+            BatchLogRecordProcessor(logger_exporter)
+        )
+        set_logger_provider(logger_provider)
+        handler = LoggingHandler(
+            level=settings.LOGGING_LEVEL, logger_provider=logger_provider
+        )
+        logging.getLogger().addHandler(handler)
+
+        # Create tracer provider
+        tracer_exporter = AzureMonitorTraceExporter.from_connection_string(
+            settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
+            # credential=credential
+        )
+        sampler = ApplicationInsightsSampler(1.0)
+        tracer_provider = TracerProvider(resource=resource, sampler=sampler)
+        tracer_provider.add_span_processor(BatchSpanProcessor(tracer_exporter))
+        set_tracer_provider(tracer_provider)
+
+        # Create meter provider
+        metrics_exporter = AzureMonitorMetricExporter.from_connection_string(
+            settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
+            # credential=credential
+        )
+        reader = PeriodicExportingMetricReader(
+            metrics_exporter, export_interval_millis=5000
+        )
+        meter_provider = MeterProvider(metric_readers=[reader])
+        set_meter_provider(meter_provider)
 
         # Configure custom metrics
         system_metrics_config = {
@@ -65,5 +116,11 @@ def setup_opentelemetry(app: FastAPI):
         }
 
         # Create instrumenter
+        FastAPIInstrumentor.instrument_app(
+            app,
+            excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
+            tracer_provider=tracer_provider,
+            meter_provider=meter_provider,
+        )
         HTTPXClientInstrumentor().instrument()
         SystemMetricsInstrumentor(config=system_metrics_config).instrument()
