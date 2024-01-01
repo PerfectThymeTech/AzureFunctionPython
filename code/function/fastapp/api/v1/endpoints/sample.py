@@ -23,9 +23,9 @@ async def post_predict(
         response = await client.get("https://www.bing.com")
     logger.info(f"Received response status code: {response.status_code}")
 
-    with httpx.Client() as client:
-        response = client.get("https://www.google.com")
-    response = httpx.get("https://www.google.de")
+    # with httpx.Client() as client:
+    #     response = client.get("https://www.google.com")
+    # response = httpx.get("https://www.google.de")
 
     # tracer_attributes = {"http.client_ip": x_forwarded_for}
     # with tracer.start_as_current_span(
