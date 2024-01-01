@@ -14,6 +14,11 @@ async def lifespan(app: FastAPI) -> None:
     pass
 
 
+def lifespan_sync(app: FastAPI) -> None:
+    """Gracefully start the application before the server reports readiness."""
+    setup_opentelemetry(app=app)
+
+
 def get_app() -> FastAPI:
     """Setup the Fast API server.
 
