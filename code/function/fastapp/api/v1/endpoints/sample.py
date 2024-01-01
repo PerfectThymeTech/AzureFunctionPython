@@ -19,16 +19,20 @@ async def post_predict(
     logger.info(f"Received request: {data}")
 
     # Sample request
-    tracer_attributes = {"http.client_ip": x_forwarded_for}
-    with tracer.start_as_current_span(
-        "dependency_span", attributes=tracer_attributes, kind=SpanKind.CLIENT
-    ) as span:
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get("https://www.bing.com")
-            logger.info(f"Received response status code: {response.status_code}")
-        except Exception as ex:
-            span.set_attribute("status", "exception")
-            span.record_exception(ex)
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://www.bing.com")
+    logger.info(f"Received response status code: {response.status_code}")
+
+    # tracer_attributes = {"http.client_ip": x_forwarded_for}
+    # with tracer.start_as_current_span(
+    #     "dependency_span", attributes=tracer_attributes, kind=SpanKind.CLIENT
+    # ) as span:
+    #     try:
+    #         async with httpx.AsyncClient() as client:
+    #             response = await client.get("https://www.bing.com")
+    #         logger.info(f"Received response status code: {response.status_code}")
+    #     except Exception as ex:
+    #         span.set_attribute("status", "exception")
+    #         span.record_exception(ex)
 
     return SampleResponse(output=f"Hello {data.input}")
