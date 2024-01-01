@@ -94,6 +94,14 @@ resource "azapi_resource" "function" {
             value = azurerm_application_insights.application_insights.connection_string
           },
           {
+            name  = "AZURE_SDK_TRACING_IMPLEMENTATION"
+            value = "opentelemetry"
+          },
+          {
+            name  = "AZURE_TRACING_ENABLED"
+            value = "true"
+          },
+          {
             name  = "AZURE_FUNCTIONS_ENVIRONMENT"
             value = "Production"
           },
