@@ -20,7 +20,7 @@ async def main(req: func.HttpRequest, context: func.Context) -> func.HttpRespons
     # Function logic
     with tracer.start_as_current_span("wrapper", context=parent_context) as span:
         response = await func.AsgiMiddleware(app).handle_async(
-            req=req,  # context=parent_context
+            req=req, context=parent_context
         )
 
     return response
