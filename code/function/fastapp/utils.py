@@ -66,6 +66,7 @@ def setup_opentelemetry(app: FastAPI):
         resource = Resource.create(
             {
                 "service.name": settings.WEBSITE_NAME,
+                "service.namespace": settings.WEBSITE_NAME,
                 "service.instance.id": settings.WEBSITE_INSTANCE_ID,
             }
         )
@@ -77,7 +78,10 @@ def setup_opentelemetry(app: FastAPI):
         )
         logger_provider = LoggerProvider(resource=resource)
         logger_provider.add_log_record_processor(
-            BatchLogRecordProcessor(logger_exporter)
+            BatchLogRecordProcessor(
+                exporter=logger_exporter,
+                schedule_delay_millis=settings.LOGGING_SCHEDULE_DELAY,
+            )
         )
         set_logger_provider(logger_provider)
         handler = LoggingHandler(
@@ -90,9 +94,16 @@ def setup_opentelemetry(app: FastAPI):
             settings.APPLICATIONINSIGHTS_CONNECTION_STRING,
             # credential=credential
         )
-        sampler = ApplicationInsightsSampler(1.0)
+        sampler = ApplicationInsightsSampler(
+            sampling_ratio=settings.LOGGING_SAMPLING_RATIO
+        )
         tracer_provider = TracerProvider(resource=resource, sampler=sampler)
-        tracer_provider.add_span_processor(BatchSpanProcessor(tracer_exporter))
+        tracer_provider.add_span_processor(
+            BatchSpanProcessor(
+                span_exporter=tracer_exporter,
+                schedule_delay_millis=settings.LOGGING_SCHEDULE_DELAY,
+            )
+        )
         set_tracer_provider(tracer_provider)
 
         # Create meter provider
@@ -101,7 +112,8 @@ def setup_opentelemetry(app: FastAPI):
             # credential=credential
         )
         reader = PeriodicExportingMetricReader(
-            metrics_exporter, export_interval_millis=5000
+            exporter=metrics_exporter,
+            export_interval_millis=settings.LOGGING_SCHEDULE_DELAY,
         )
         meter_provider = MeterProvider(metric_readers=[reader], resource=resource)
         set_meter_provider(meter_provider)

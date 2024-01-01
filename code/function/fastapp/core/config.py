@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     APP_VERSION: str = "v0.0.1"
     API_V1_STR: str = "/v1"
     LOGGING_LEVEL: int = logging.INFO
+    LOGGING_SAMPLING_RATIO: float = 1.0
+    LOGGING_SCHEDULE_DELAY: int = 5000
     DEBUG: bool = False
     APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
         default="", env="APPLICATIONINSIGHTS_CONNECTION_STRING"
