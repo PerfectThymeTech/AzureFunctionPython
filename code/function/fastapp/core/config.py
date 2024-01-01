@@ -16,9 +16,9 @@ class Settings(BaseSettings):
     APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
         default="", env="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
-    WEBSITE_NAME: str = Field(default="test", env="WEBSITE_SITE_NAME")
-    WEBSITE_INSTANCE_ID: str = Field(default="0", env="WEBSITE_INSTANCE_ID")
-    MY_SECRET_CONFIG: str = Field(default="", env="MY_SECRET_CONFIG")
+    WEBSITE_NAME: str = Field(default="test", alias="WEBSITE_SITE_NAME")
+    WEBSITE_INSTANCE_ID: str = Field(default="0", alias="WEBSITE_INSTANCE_ID")
+    MY_SECRET_CONFIG: str = Field(default="", alias="MY_SECRET_CONFIG")
 
 
 settings = Settings()
