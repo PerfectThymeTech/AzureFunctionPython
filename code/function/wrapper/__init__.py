@@ -16,14 +16,17 @@ async def main(req: func.HttpRequest, context: func.Context) -> func.HttpRespons
     parent_context = TraceContextTextMapPropagator().extract(
         carrier=functions_current_context
     )
-    token = attach(parent_context)
 
     # Function logic
-    try:
-        with tracer.start_as_current_span("wrapper") as span:
-            response = await func.AsgiMiddleware(app).handle_async(req, context)
-    finally:
-        # End distributed tracing
-        detach(token)
+    with tracer.start_as_current_span("wrapper", context=parent_context) as span:
+        response = await func.AsgiMiddleware(app).handle_async(req, parent_context)
+
+    # token = attach(parent_context)
+    # try:
+    #     with tracer.start_as_current_span("wrapper") as span:
+    #         response = await func.AsgiMiddleware(app).handle_async(req, parent_context)
+    # finally:
+    #     # End distributed tracing
+    #     detach(token)
 
     return response
