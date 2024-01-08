@@ -1,8 +1,6 @@
 import logging
 from logging import Logger
 
-from azure.monitor.opentelemetry import configure_azure_monitor
-
 # from azure.identity import ManagedIdentityCredential
 from azure.monitor.opentelemetry.exporter import (
     ApplicationInsightsSampler,
