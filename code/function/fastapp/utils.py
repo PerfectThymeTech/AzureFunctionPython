@@ -1,8 +1,6 @@
 import logging
 from logging import Logger
 
-from azure.monitor.opentelemetry import configure_azure_monitor
-
 # from azure.identity import ManagedIdentityCredential
 from azure.monitor.opentelemetry.exporter import (
     ApplicationInsightsSampler,
@@ -25,7 +23,7 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace import Tracer, get_tracer_provider, set_tracer_provider
+from opentelemetry.trace import Tracer, set_tracer_provider
 
 
 def setup_logging(module) -> Logger:
@@ -130,7 +128,7 @@ def setup_opentelemetry(app: FastAPI):
         # Create instrumenter
         FastAPIInstrumentor.instrument_app(
             app,
-            excluded_urls=f"{settings.API_V1_STR}/health/heartbeat",
+            excluded_urls=f".*.in.applicationinsights.azure.com/.*,{settings.API_V1_STR}/health/heartbeat",
             tracer_provider=tracer_provider,
             meter_provider=meter_provider,
         )
