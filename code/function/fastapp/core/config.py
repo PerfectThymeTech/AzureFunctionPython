@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     LOGGING_SCHEDULE_DELAY: int = 5000
     DEBUG: bool = False
     APPLICATIONINSIGHTS_CONNECTION_STRING: str = Field(
-        default="", env="APPLICATIONINSIGHTS_CONNECTION_STRING"
+        default="", alias="APPLICATIONINSIGHTS_CONNECTION_STRING"
     )
     WEBSITE_NAME: str = Field(default="test", alias="WEBSITE_SITE_NAME")
     WEBSITE_INSTANCE_ID: str = Field(default="0", alias="WEBSITE_INSTANCE_ID")
