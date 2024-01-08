@@ -23,7 +23,7 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace import Tracer, get_tracer_provider, set_tracer_provider
+from opentelemetry.trace import Tracer, set_tracer_provider
 
 
 def setup_logging(module) -> Logger:
