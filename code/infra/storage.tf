@@ -45,57 +45,34 @@ resource "azurerm_storage_account" "storage" {
     publish_microsoft_endpoints = false
   }
   sftp_enabled              = false
-  shared_access_key_enabled = false
+  shared_access_key_enabled = false # Required to be set to 'true' when creating a Windows host
 }
 
-resource "azurerm_storage_management_policy" "storage_management_policy" {
-  storage_account_id = azurerm_storage_account.storage.id
+# resource "azurerm_storage_management_policy" "storage_management_policy" {
+#   storage_account_id = azurerm_storage_account.storage.id
 
-  rule {
-    name    = "default"
-    enabled = true
-    actions {
-      base_blob {
-        tier_to_cool_after_days_since_modification_greater_than = 360
-        # delete_after_days_since_modification_greater_than = 720
-      }
-      snapshot {
-        change_tier_to_cool_after_days_since_creation = 180
-        delete_after_days_since_creation_greater_than = 360
-      }
-      version {
-        change_tier_to_cool_after_days_since_creation = 180
-        delete_after_days_since_creation              = 360
-      }
-    }
-    filters {
-      blob_types   = ["blockBlob"]
-      prefix_match = []
-    }
-  }
-}
-
-resource "azapi_resource" "storage_file_share" {
-  type      = "Microsoft.Storage/storageAccounts/fileServices/shares@2022-09-01"
-  name      = "logicapp"
-  parent_id = "${azurerm_storage_account.storage.id}/fileServices/default"
-
-  body = jsonencode({
-    properties = {
-      accessTier       = "TransactionOptimized"
-      enabledProtocols = "SMB"
-      shareQuota       = 5120
-    }
-  })
-}
-
-# resource "azurerm_storage_share" "storage_file_share" {
-#   name = "logicapp"
-#   storage_account_name = azurerm_storage_account.storage.name
-
-#   access_tier = "TransactionOptimized"
-#   enabled_protocol = "SMB"
-#   quota = 5120
+#   rule {
+#     name    = "default"
+#     enabled = true
+#     actions {
+#       base_blob {
+#         tier_to_cool_after_days_since_modification_greater_than = 360
+#         # delete_after_days_since_modification_greater_than = 720
+#       }
+#       snapshot {
+#         change_tier_to_cool_after_days_since_creation = 180
+#         delete_after_days_since_creation_greater_than = 360
+#       }
+#       version {
+#         change_tier_to_cool_after_days_since_creation = 180
+#         delete_after_days_since_creation              = 360
+#       }
+#     }
+#     filters {
+#       blob_types   = ["blockBlob"]
+#       prefix_match = []
+#     }
+#   }
 # }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_storage" {
