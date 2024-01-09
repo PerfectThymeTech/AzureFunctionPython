@@ -207,7 +207,7 @@ resource "azapi_resource" "function" {
   })
 
   schema_validation_enabled = false
-  # ignore_body_changes = [
+  # ignore_body_changes = [ # Required when app settings are managed in a separate process
   #   "properties.siteConfig.appSettings"
   # ]
   depends_on = [
