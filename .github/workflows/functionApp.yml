@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/_functionAppTestTemplate.yml
     name: "Function App Test"
     with:
-      python_version: "3.10"
+      python_version: "3.11"
       function_directory: "./code/function"
 
   function_container:

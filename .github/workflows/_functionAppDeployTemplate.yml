@@ -11,7 +11,7 @@ on:
       python_version:
         required: true
         type: string
-        default: "3.10"
+        default: "3.11"
         description: "Specifies the python version."
       function_directory:
         required: true
@@ -50,8 +50,8 @@ jobs:
         id: checkout_repository
         uses: actions/checkout@v4
 
-      # Setup Python 3.10
-      - name: Setup Python 3.10
+      # Setup Python
+      - name: Setup Python
         id: python_setup
         uses: actions/setup-python@v5
         with:
