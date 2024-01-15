@@ -15,7 +15,6 @@ permissions:
 env:
   TAG_NAME: ${{ github.event.inputs.tag_name || github.event.release.tag_name }}
 
-
 jobs:
   update_tag:
     name: Update the major tag to include the ${{ github.event.inputs.tag_name || github.event.release.tag_name }} changes

@@ -37,7 +37,7 @@ on:
 jobs:
   deployment:
     name: Container Build & Push
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     continue-on-error: false
     environment: ${{ inputs.environment }}
 
