@@ -4,9 +4,11 @@
     "fileLoggingMode": "debugOnly",
     "logLevel": {
       "default": "Information",
+      "Worker": "Information",
       "Host": "Information",
-      "Function": "Information",
-      "Host.Aggregator": "Information"
+      "Host.Aggregator": "Information",
+      "Host.Results": "Information",
+      "Function": "Information"
     },
     "applicationInsights": {
       "samplingSettings": {
