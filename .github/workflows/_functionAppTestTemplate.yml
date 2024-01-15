@@ -16,7 +16,7 @@ on:
 jobs:
   deployment:
     name: Function App Test
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     continue-on-error: false
 
     steps:

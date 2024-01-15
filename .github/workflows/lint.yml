@@ -10,7 +10,8 @@ on:
 jobs:
   lint:
     name: Lint and Test
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
+    continue-on-error: false
 
     steps:
       # Setup Python 3.11
@@ -37,8 +38,13 @@ jobs:
       - name: Run Linting
         id: linting
         run: |
-          pip install -r requirements.txt -q
+          echo "Install dependencies"
+          python3 -m pip install -r requirements.txt -q
+
+          echo "Initialize Git"
           git init
           git add *
-          pre-commit install --install-hooks
-          pre-commit run --all-files --verbose
+
+          echo "Run pre-commit"
+          python3 -m pre_commit install --install-hooks
+          python3 -m pre_commit run --all-files --verbose
