@@ -15,6 +15,10 @@ on:
         required: true
         type: string
         description: "Specifies the terraform version."
+      node_version:
+        required: true
+        type: number
+        description: "Specifies the node version."
       working_directory:
         required: true
         type: string
@@ -110,7 +114,7 @@ jobs:
         id: node_setup
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ inputs.node_version }}
 
       # Setup Terraform
       - name: Setup Terraform
@@ -205,7 +209,7 @@ jobs:
         id: node_setup
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ inputs.node_version }}
 
       # Setup Terraform
       - name: Setup Terraform
