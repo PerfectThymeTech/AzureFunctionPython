@@ -12,9 +12,6 @@ async def verify_health_auth_header(x_ms_auth_internal_token: Annotated[str, Hea
     """
     website_auth_encryption_key = settings.WEBSITE_AUTH_ENCRYPTION_KEY
     hash = base64.b64encode(sha256(website_auth_encryption_key.encode('utf-8')).digest()).decode('utf-8')
-    print("Tokens are:")
-    print(hash)
-    print(x_ms_auth_internal_token)
     if hash != x_ms_auth_internal_token:
         raise HTTPException(status_code=400, detail="x-ms-auth-internal-token is invalid")
     else:
