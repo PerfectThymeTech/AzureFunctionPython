@@ -10,6 +10,7 @@ async def verify_health_auth_header(
     x_ms_auth_internal_token: Annotated[str, Header()]
 ) -> bool:
     """Returns true if SHA256 of header_value matches WEBSITE_AUTH_ENCRYPTION_KEY.
+    Documentation: https://learn.microsoft.com/en-us/azure/app-service/monitor-instances-health-check?tabs=python#authentication-and-security
 
     x_ms_auth_internal_token: Value of the x-ms-auth-internal-token header.
     RETURNS (bool): Specifies whether the header matches.
