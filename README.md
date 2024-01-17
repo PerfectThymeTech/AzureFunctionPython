@@ -57,6 +57,10 @@ This sample uses FastAPI as a baseline which is a scalable, modern, fast and pro
 
 This sample uses Open Telemetry and the FastAPI and Azure Application Insights integration for end to end tracking of API calls using logs and metrics and dependency calls. More information about Open Telemetry can be found [here](https://opentelemetry.io/).
 
+### Health Endpoint
+
+This sample exposes a health endpoint that includes header validation (Header `x-ms-auth-internal-token`) to ensure that only the health check feature of the Azure Function it self is allowed to call this endpoint. When trying to reach this endpoint from outside, the request will be blocked with a 400 response.
+
 ### Testing
 
 Testing of the Azure Functon application code. The testing is done using `pytest`. Tests are stored in the [`/tests` folder](/tests/) and should be extended for new functionality that is being implemented over time. The `pytest.ini` is used to reference the Azure Functon project for imports. This file makes sure that the respective python objects from the Azrue Function application code can be imported into the tests and validated accordingly.
