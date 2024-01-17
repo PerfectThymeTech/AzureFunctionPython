@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     )
     WEBSITE_NAME: str = Field(default="test", alias="WEBSITE_SITE_NAME")
     WEBSITE_INSTANCE_ID: str = Field(default="0", alias="WEBSITE_INSTANCE_ID")
+    WEBSITE_AUTH_ENCRYPTION_KEY: str = Field(
+        default="", alias="WEBSITE_AUTH_ENCRYPTION_KEY"
+    )
     MY_SECRET_CONFIG: str = Field(default="", alias="MY_SECRET_CONFIG")
 
 
