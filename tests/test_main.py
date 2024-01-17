@@ -12,9 +12,12 @@ def client() -> TestClient:
 def test_get_heartbeat(client, version):
     # arrange
     path = f"/{version}/health/heartbeat"
+    headers = {
+        "x-ms-auth-internal-token": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
+    }
 
     # action
-    response = client.get(path)
+    response = client.get(path, headers=headers)
 
     # assert
     assert response.status_code == 200
