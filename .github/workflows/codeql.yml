@@ -1,4 +1,4 @@
-name: Code Scanning - CodeQL
+name: Code Scanning
 on:
   push:
     branches:
@@ -10,8 +10,8 @@ on:
     - cron: "00 10 * * 6"
 
 jobs:
-  analyze:
-    name: Analyze Code
+  codeql:
+    name: CodeQL
     runs-on: [ubuntu-latest]
     timeout-minutes: 360
 
