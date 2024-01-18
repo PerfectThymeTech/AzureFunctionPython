@@ -4,6 +4,9 @@ from typing import Annotated
 
 from fastapi import Header, HTTPException
 from fastapp.core.config import settings
+from fastapp.utils import setup_logging
+
+logger = setup_logging(__name__)
 
 
 async def verify_health_auth_header(
@@ -15,6 +18,7 @@ async def verify_health_auth_header(
     x_ms_auth_internal_token: Value of the x-ms-auth-internal-token header.
     RETURNS (bool): Specifies whether the header matches.
     """
+    logger.info(f"Header value: '{x_ms_auth_internal_token}'")
     website_auth_encryption_key = settings.WEBSITE_AUTH_ENCRYPTION_KEY
     hash = base64.b64encode(
         sha256(website_auth_encryption_key.encode("utf-8")).digest()
