@@ -102,6 +102,10 @@ resource "azapi_resource" "function" {
             value = "true"
           },
           {
+            name  = "OTEL_PYTHON_REQUESTS_EXCLUDED_URLS"
+            value = ".*.in.applicationinsights.azure.com/.*"
+          },
+          {
             name  = "AZURE_FUNCTIONS_ENVIRONMENT"
             value = "Production"
           },
