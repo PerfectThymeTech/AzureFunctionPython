@@ -122,6 +122,10 @@ resource "azapi_resource" "function" {
             value = "1"
           },
           {
+            name  = "WEBSITE_OS_TYPE"
+            value = azurerm_service_plan.service_plan.os_type
+          },
+          {
             name  = "WEBSITE_RUN_FROM_PACKAGE"
             value = "0"
           },
