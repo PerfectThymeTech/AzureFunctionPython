@@ -4,7 +4,7 @@
 
 # azure-identity~=1.15.0
 azure-functions~=1.18.0
-fastapi~=0.109.0
+fastapi~=0.109.1
 pydantic-settings~=2.1.0
 httpx~=0.26.0
 azure-monitor-opentelemetry-exporter==1.0.0b20

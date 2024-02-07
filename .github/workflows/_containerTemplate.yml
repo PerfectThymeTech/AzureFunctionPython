@@ -54,7 +54,7 @@ jobs:
 
       # Install cosign
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3.3.0
+        uses: sigstore/cosign-installer@v3.4.0
         id: install_cosign
         if: github.event_name == 'release'
         with:
@@ -83,7 +83,7 @@ jobs:
       # Extract Metadata (tags, labels)
       - name: Extract Metadata
         id: metadata
-        uses: docker/metadata-action@v5.5.0
+        uses: docker/metadata-action@v5.5.1
         with:
           context: workflow
           images: |
