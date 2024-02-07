@@ -6,6 +6,8 @@ on:
     paths:
       - "**.py"
       - "code/function/**"
+      - "tests/**"
+      - "requirements.txt"
 
   pull_request:
     branches:
@@ -13,6 +15,8 @@ on:
     paths:
       - "**.py"
       - "code/function/**"
+      - "tests/**"
+      - "requirements.txt"
 
 jobs:
   function_test:
