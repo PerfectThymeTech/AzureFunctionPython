@@ -16,32 +16,32 @@ resource "azurerm_application_insights" "application_insights" {
   workspace_id                          = azurerm_log_analytics_workspace.log_analytics_workspace.id
 }
 
-data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_application_insights" {
-  resource_id = azurerm_application_insights.application_insights.id
-}
+# data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_application_insights" { # Disable to avoid duplicate logs in Application Insights
+#   resource_id = azurerm_application_insights.application_insights.id
+# }
 
-resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_application_insights" {
-  name                       = "logAnalytics"
-  target_resource_id         = azurerm_application_insights.application_insights.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+# resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_application_insights" {
+#   name                       = "logAnalytics"
+#   target_resource_id         = azurerm_application_insights.application_insights.id
+#   log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
 
-  dynamic "enabled_log" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_application_insights.log_category_groups
-    content {
-      category_group = entry.value
-    }
-  }
+#   dynamic "enabled_log" {
+#     iterator = entry
+#     for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_application_insights.log_category_groups
+#     content {
+#       category_group = entry.value
+#     }
+#   }
 
-  dynamic "metric" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_application_insights.metrics
-    content {
-      category = entry.value
-      enabled  = true
-    }
-  }
-}
+#   dynamic "metric" {
+#     iterator = entry
+#     for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_application_insights.metrics
+#     content {
+#       category = entry.value
+#       enabled  = true
+#     }
+#   }
+# }
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
   name                = "${local.prefix}-log001"
