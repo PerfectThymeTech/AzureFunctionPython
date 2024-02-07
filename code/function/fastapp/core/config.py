@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     WEBSITE_AUTH_ENCRYPTION_KEY: str = Field(
         default="", alias="WEBSITE_AUTH_ENCRYPTION_KEY"
     )
+    WEBSITE_OS_TYPE: str = Field(default="test", alias="WEBSITE_OS_TYPE")
     MY_SECRET_CONFIG: str = Field(default="", alias="MY_SECRET_CONFIG")
 
 
