@@ -10,7 +10,7 @@ logger = setup_logging(__name__)
 
 
 async def verify_health_auth_header(
-    x_ms_auth_internal_token: Annotated[str, Header()]
+    x_ms_auth_internal_token: Annotated[str, Header()] = ""
 ) -> bool:
     """Returns true if SHA256 of header_value matches WEBSITE_AUTH_ENCRYPTION_KEY.
     Documentation: https://learn.microsoft.com/en-us/azure/app-service/monitor-instances-health-check?tabs=python#authentication-and-security
@@ -22,8 +22,8 @@ async def verify_health_auth_header(
     logger.info(f"Encryption key: '{settings.WEBSITE_AUTH_ENCRYPTION_KEY}'")
     website_auth_encryption_key = settings.WEBSITE_AUTH_ENCRYPTION_KEY
     hash = base64.b64encode(
-        sha256(website_auth_encryption_key.encode("utf-8")).digest()
-    ).decode("utf-8")
+        sha256(website_auth_encryption_key.encode('utf-8')).digest()
+    ).decode('utf-8')
     # if hash != x_ms_auth_internal_token:
     #     raise HTTPException(
     #         status_code=400, detail="x-ms-auth-internal-token is invalid"
