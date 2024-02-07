@@ -19,6 +19,7 @@ async def verify_health_auth_header(
     RETURNS (bool): Specifies whether the header matches.
     """
     logger.info(f"Header value: '{x_ms_auth_internal_token}'")
+    logger.info(f"Encryption key: '{settings.WEBSITE_AUTH_ENCRYPTION_KEY}'")
     website_auth_encryption_key = settings.WEBSITE_AUTH_ENCRYPTION_KEY
     hash = base64.b64encode(
         sha256(website_auth_encryption_key.encode("utf-8")).digest()
