@@ -4,7 +4,7 @@ resource "azurerm_monitor_activity_log_alert" "monitor_activity_log_alert_servic
   tags                = var.tags
 
   enabled     = true
-  description = "Alerts for service health and maintenance events."
+  description = "Alerts about service health and maintenance events."
   scopes = [
     data.azurerm_subscription.current.id
   ]
