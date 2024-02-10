@@ -189,7 +189,7 @@ resource "azapi_resource" "function" {
         azureStorageAccounts                   = {}
         detailedErrorLoggingEnabled            = true
         functionAppScaleLimit                  = 0
-        functionsRuntimeScaleMonitoringEnabled = false
+        functionsRuntimeScaleMonitoringEnabled = true
         ftpsState                              = "Disabled"
         healthCheckPath                        = var.function_health_path
         http20Enabled                          = true
