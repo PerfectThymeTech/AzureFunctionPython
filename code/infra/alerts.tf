@@ -11,17 +11,11 @@ resource "azurerm_monitor_activity_log_alert" "monitor_activity_log_alert_servic
   action {
     action_group_id = azurerm_monitor_action_group.monitor_action_group.id
     webhook_properties = {
-      "alert_custom_type"              = "service-health",
-      "alert_custom_location"          = var.location
-      "alert_custom_env"               = var.environment
-      "alert_custom_sub"               = data.azurerm_client_config.current.subscription_id
-      "alert_custom_resource_group"    = azurerm_resource_group.extension_rg.name
-      "alert_custom_instance"          = var.prefix
-      "alert_custom_layer"             = "core"
-      "alert_custom_layer_name"        = "core"
-      "alert_custom_snowseverity"      = "Info"
-      "alert_custom_snowfgroup"        = "A.TEC.GLOB.ADP.DL.3RD"
-      "alert_custom_snowincidentlevel" = "P3"
+      "alert-type"   = "service-health",
+      "location"     = var.location
+      "environment"  = var.environment
+      "subscription" = data.azurerm_client_config.current.subscription_id
+      "severity"     = "Info"
     }
   }
   criteria {
