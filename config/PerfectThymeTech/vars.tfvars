@@ -16,6 +16,9 @@ vnet_id        = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGr
 nsg_id         = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-function-network-rg/providers/Microsoft.Network/networkSecurityGroups/mycrp-prd-function-nsg001"
 route_table_id = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-function-network-rg/providers/Microsoft.Network/routeTables/mycrp-prd-function-rt001"
 
+# Monitoring variables
+alert_endpoints = {}
+
 # DNS variables
 private_dns_zone_id_blob              = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
 private_dns_zone_id_queue             = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"

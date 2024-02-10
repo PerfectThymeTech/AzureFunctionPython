@@ -102,6 +102,22 @@ variable "my_secret" {
   }
 }
 
+# Monitoring variables
+variable "alert_endpoints" {
+  description = "Specifies the alert details."
+  type = object({
+    email = optional(object({
+      email_address = string
+    }), null)
+  })
+  sensitive = false
+  default   = {}
+  validation {
+    condition     = var.alert_endpoints == {} || length(var.alert_endpoints) > 0
+    error_message = "Please specify valid alert endpoints."
+  }
+}
+
 # Network variables
 variable "vnet_id" {
   description = "Specifies the resource ID of the Vnet used for the Azure Function."
