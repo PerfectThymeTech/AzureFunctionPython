@@ -23,6 +23,17 @@
 # Jupyter notebook
 *.ipynb  text eol=lf
 
+# Apply override to all files in the directory
+*.md linguist-detectable
+
+# HachiCorp Configuration Language
+*.hcl eol=lf
+
+# Terraform
+*.tf      text eol=lf
+*.tf.json text eol=lf
+*.tfvars  text eol=lf
+
 # Note: .db, .p, and .pkl files are associated
 # with the python modules ``pickle``, ``dbm.*``,
 # ``shelve``, ``marshal``, ``anydbm``, & ``bsddb``
