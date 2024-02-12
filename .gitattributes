@@ -1,4 +1,21 @@
-# Basic .gitattributes for a python repo.
+# THIS IS ONLY FOR THE gitattributes REPOSITORY.
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
+*               text=auto
+
+# These files are text and should be normalized (Convert crlf => lf)
+*.gitattributes text
+.gitignore      text
+*.md            text diff=markdown
+
+# Exclude files from exporting
+.gitattributes  export-ignore
+.gitignore      export-ignore
+
+# Enable syntax highlighting for files with `.gitattributes` extensions.
+*.gitattributes linguist-language=gitattributes
+*.gitattributes linguist-detectable=true
+*.gitattributes linguist-documentation=false
 
 # Source files
 # ============
@@ -27,3 +44,14 @@
 # with the python modules ``pickle``, ``dbm.*``,
 # ``shelve``, ``marshal``, ``anydbm``, & ``bsddb``
 # (among others).
+
+# Apply override to all files in the directory
+*.md linguist-detectable
+
+# HachiCorp Configuration Language
+*.hcl eol=lf
+
+# Terraform
+*.tf      text eol=lf
+*.tf.json text eol=lf
+*.tfvars  text eol=lf
