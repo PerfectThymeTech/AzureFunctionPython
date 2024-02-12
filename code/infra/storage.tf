@@ -52,33 +52,6 @@ resource "azurerm_storage_account" "storage" {
   shared_access_key_enabled = false # Required to be set to 'true' when creating a Windows host
 }
 
-# resource "azurerm_storage_management_policy" "storage_management_policy" {
-#   storage_account_id = azurerm_storage_account.storage.id
-
-#   rule {
-#     name    = "default"
-#     enabled = true
-#     actions {
-#       base_blob {
-#         tier_to_cool_after_days_since_modification_greater_than = 360
-#         # delete_after_days_since_modification_greater_than = 720
-#       }
-#       snapshot {
-#         change_tier_to_cool_after_days_since_creation = 180
-#         delete_after_days_since_creation_greater_than = 360
-#       }
-#       version {
-#         change_tier_to_cool_after_days_since_creation = 180
-#         delete_after_days_since_creation              = 360
-#       }
-#     }
-#     filters {
-#       blob_types   = ["blockBlob"]
-#       prefix_match = []
-#     }
-#   }
-# }
-
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_storage" {
   resource_id = azurerm_storage_account.storage.id
 }
