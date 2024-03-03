@@ -199,7 +199,7 @@ resource "azapi_resource" "function" {
         loadBalancing                          = "LeastRequests"
         minTlsVersion                          = "1.2"
         minTlsCipherSuite                      = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
-        minimumElasticInstanceCount            = 0
+        minimumElasticInstanceCount            = 1
         numberOfWorkers                        = 1
         preWarmedInstanceCount                 = 0
         remoteDebuggingEnabled                 = false
