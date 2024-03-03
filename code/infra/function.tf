@@ -87,7 +87,7 @@ resource "azapi_resource" "function" {
         #   }
         # }
         acrUseManagedIdentityCreds = false
-        alwaysOn                   = true
+        alwaysOn                   = false
         appSettings = [
           {
             name  = "APPLICATIONINSIGHTS_CONNECTION_STRING"
@@ -189,7 +189,7 @@ resource "azapi_resource" "function" {
         azureStorageAccounts                   = {}
         detailedErrorLoggingEnabled            = true
         functionAppScaleLimit                  = 0
-        functionsRuntimeScaleMonitoringEnabled = false
+        functionsRuntimeScaleMonitoringEnabled = true
         ftpsState                              = "Disabled"
         healthCheckPath                        = var.function_health_path
         http20Enabled                          = true
