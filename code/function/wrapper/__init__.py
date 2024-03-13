@@ -1,6 +1,6 @@
 import azure.functions as func
-from fastapp.main import app, lifespan_sync
-from fastapp.utils import setup_tracer
+from main import app, lifespan_sync
+from utils import setup_tracer
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 lifespan_sync(app=app)

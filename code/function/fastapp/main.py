@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapp.api.v1.api_v1 import api_v1_router
-from fastapp.core.config import settings
-from fastapp.utils import setup_opentelemetry
+from api.v1.api_v1 import api_v1_router
+from api.aad.aad import aad_router
+from core.config import settings
+from utils import setup_opentelemetry
 
 
 @asynccontextmanager
@@ -33,6 +34,7 @@ def get_app() -> FastAPI:
         lifespan=lifespan,
     )
     app.include_router(api_v1_router, prefix=settings.API_V1_STR)
+    app.include_router(aad_router, prefix="/mytenantid")
     return app
 
 

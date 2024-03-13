@@ -3,8 +3,8 @@ from hashlib import sha256
 from typing import Annotated
 
 from fastapi import Header, HTTPException
-from fastapp.core.config import settings
-from fastapp.utils import setup_logging
+from core.config import settings
+from utils import setup_logging
 
 logger = setup_logging(__name__)
 

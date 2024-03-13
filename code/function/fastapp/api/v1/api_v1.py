@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapp.api.v1.endpoints import heartbeat, sample
+from api.v1.endpoints import heartbeat, sample
 
 api_v1_router = APIRouter()
 api_v1_router.include_router(sample.router, prefix="/sample", tags=["sample"])

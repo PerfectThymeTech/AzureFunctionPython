@@ -2,8 +2,8 @@ from typing import Annotated
 
 import httpx
 from fastapi import APIRouter, Header
-from fastapp.models.sample import SampleRequest, SampleResponse
-from fastapp.utils import setup_logging
+from models.sample import SampleRequest, SampleResponse
+from utils import setup_logging
 
 logger = setup_logging(__name__)
 
