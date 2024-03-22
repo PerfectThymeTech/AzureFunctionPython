@@ -1,0 +1,54 @@
+name: Test01
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test01:
+    name: Test01
+    runs-on: [ubuntu-latest]
+    continue-on-error: false
+
+    steps:
+      # Run
+      - name: Run
+        continue-on-error: true
+        run: |
+          exit 1
+      
+      # Run
+      - name: Run
+        run: |
+          exit 0
+      
+      # Run
+      - name: Run
+        run: |
+          exit 0
+
+  test02:
+    name: Test02
+    runs-on: [ubuntu-latest]
+    continue-on-error: false
+
+    steps:
+      # Run
+      - name: Run
+        run: |
+          exit 1
+      
+      # Run
+      - name: Run
+        if: always()
+        run: |
+          exit 0
+      
+      # Run
+      - name: Run
+        run: |
+          exit 0
+        
