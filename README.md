@@ -64,3 +64,9 @@ This sample exposes a health endpoint that includes header validation (Header `x
 ### Testing
 
 Testing of the Azure Functon application code. The testing is done using `pytest`. Tests are stored in the [`/tests` folder](/tests/) and should be extended for new functionality that is being implemented over time. The `pytest.ini` is used to reference the Azure Functon project for imports. This file makes sure that the respective python objects from the Azrue Function application code can be imported into the tests and validated accordingly.
+
+## Architecture
+
+The following architecture is created by this repository:
+
+![Architecture](/docs/architecture.png)
