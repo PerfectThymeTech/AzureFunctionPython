@@ -43,6 +43,9 @@ jobs:
     runs-on: [self-hosted]
     continue-on-error: false
     environment: ${{ inputs.environment }}
+    concurrency:
+      group: function-${{ inputs.function_name }}-${{ inputs.environment }}
+      cancel-in-progress: false
 
     steps:
       # Check Out Repository

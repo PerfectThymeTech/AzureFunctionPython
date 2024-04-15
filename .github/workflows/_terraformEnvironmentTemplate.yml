@@ -100,6 +100,9 @@ jobs:
     continue-on-error: false
     environment: ${{ inputs.environment }}
     needs: [lint]
+    concurrency:
+      group: terraform-${{ inputs.config }}-${{ inputs.environment }}
+      cancel-in-progress: false
 
     env:
       ARM_TENANT_ID: ${{ inputs.tenant_id }}
@@ -188,6 +191,15 @@ jobs:
               body: output
             })
 
+      # Terraform State Unlock
+      - name: Terraform State Unlock
+        working-directory: ${{ inputs.working_directory }}
+        if: cancelled()
+        run: |
+          LOCK_ID=`jq -r '.ID' .terraform.tfstate.lock.info`
+          echo $LOCK_ID
+          terraform force-unlock -force $LOCK_ID
+
   apply:
     name: Terraform Apply
     runs-on: [self-hosted]
@@ -195,6 +207,9 @@ jobs:
     environment: ${{ inputs.environment }}
     if: github.event_name == 'push' || github.event_name == 'release'
     needs: [plan]
+    concurrency:
+      group: terraform-${{ inputs.config }}-${{ inputs.environment }}
+      cancel-in-progress: false
 
     env:
       ARM_TENANT_ID: ${{ inputs.tenant_id }}
@@ -240,3 +255,12 @@ jobs:
         env:
           CONFIG: ${{ inputs.config }}
           TF_VAR_my_secret: ${{ secrets.MY_SAMPLE_SECRET }}
+
+      # Terraform State Unlock
+      - name: Terraform State Unlock
+        working-directory: ${{ inputs.working_directory }}
+        if: cancelled()
+        run: |
+          LOCK_ID=`jq -r '.ID' .terraform.tfstate.lock.info`
+          echo $LOCK_ID
+          terraform force-unlock -force $LOCK_ID
