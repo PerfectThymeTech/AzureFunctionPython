@@ -191,15 +191,6 @@ jobs:
               body: output
             })
 
-      # Terraform State Unlock
-      - name: Terraform State Unlock
-        working-directory: ${{ inputs.working_directory }}
-        if: cancelled()
-        run: |
-          LOCK_ID=`jq -r '.ID' .terraform.tfstate.lock.info`
-          echo $LOCK_ID
-          terraform force-unlock -force $LOCK_ID
-
   apply:
     name: Terraform Apply
     runs-on: [self-hosted]
@@ -255,12 +246,3 @@ jobs:
         env:
           CONFIG: ${{ inputs.config }}
           TF_VAR_my_secret: ${{ secrets.MY_SAMPLE_SECRET }}
-
-      # Terraform State Unlock
-      - name: Terraform State Unlock
-        working-directory: ${{ inputs.working_directory }}
-        if: cancelled()
-        run: |
-          LOCK_ID=`jq -r '.ID' .terraform.tfstate.lock.info`
-          echo $LOCK_ID
-          terraform force-unlock -force $LOCK_ID
