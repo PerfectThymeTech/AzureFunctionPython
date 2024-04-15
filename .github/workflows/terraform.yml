@@ -8,6 +8,7 @@ on:
       - "code/infra/**"
       - "config/**"
       - ".github/workflows/terraform.yml"
+      - ".github/workflows/_terraformEnvironmentTemplate.yml"
 
   pull_request:
     branches:
@@ -17,6 +18,7 @@ on:
       - "code/infra/**"
       - "config/**"
       - ".github/workflows/terraform.yml"
+      - ".github/workflows/_terraformEnvironmentTemplate.yml"
 
 jobs:
   terraform_dev:
