@@ -72,7 +72,7 @@ jobs:
 
       # Login Container Registry
       - name: Login Container Registry
-        uses: docker/login-action@v3.1.0
+        uses: docker/login-action@v3.2.0
         id: registry_login
         if: github.event_name != 'pull_request'
         with:
