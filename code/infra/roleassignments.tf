@@ -1,9 +1,17 @@
+# Current role assignments
 resource "azurerm_role_assignment" "current_role_assignment_key_vault" {
   scope                = azurerm_key_vault.key_vault.id
   role_definition_name = "Key Vault Administrator"
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+resource "azurerm_role_assignment" "current_role_assignment_app_configuration" {
+  scope                = azurerm_app_configuration.app_configuration.id
+  role_definition_name = "App Configuration Data Owner"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+# Function role assignments
 resource "azurerm_role_assignment" "function_role_assignment_storage_blob_data_owner" {
   scope                = azurerm_storage_account.storage.id
   role_definition_name = "Storage Blob Data Owner"
@@ -36,3 +44,16 @@ resource "azurerm_role_assignment" "function_role_assignment_key_vault" {
 #   role_definition_name = "Monitoring Metrics Publisher"
 #   principal_id         = azapi_resource.function.identity[0].principal_id
 # }
+
+resource "azurerm_role_assignment" "function_role_assignment_app_configuration" {
+  scope                = azurerm_app_configuration.app_configuration.id
+  role_definition_name = "App Configuration Data Reader"
+  principal_id         = azapi_resource.function.identity[0].principal_id
+}
+
+# App Configuration role assignments
+resource "azurerm_role_assignment" "app_configuration_role_assignment_key_vault" {
+  scope                = azurerm_key_vault.key_vault.id
+  role_definition_name = "Key Vault Secrets Reader"
+  principal_id         = azurerm_app_configuration.app_configuration.identity[0].principal_id
+}
