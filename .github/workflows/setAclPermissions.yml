@@ -45,7 +45,7 @@ jobs:
       storage_account_name: "mabussadls001" # "${{ inputs.storage_account_name }}"
       storage_container_name: "testsetacl" # "${{ inputs.storage_container_name }}"
       storage_container_path: "/" # "${{ inputs.storage_container_path }}"
-      user_object_id: "c1b9add1-e5cb-47c7-aa95-be63e1d5fd11" # "${{ inputs.user_object_id }}"
+      user_object_id: "cc068096-fcd1-4cfb-9980-807c71e41d69" # "${{ inputs.user_object_id }}"
       acl_permissions: "rwx" # "${{ inputs.acl_permissions }}"
     secrets:
       TENANT_ID: ${{ secrets.TENANT_ID }}
