@@ -45,7 +45,7 @@ on:
 jobs:
   exec:
     name: Run Az CLI Command
-    runs-on: [self-hosted, linux, adp]
+    runs-on: ubuntu-latest # [self-hosted, linux, adp]
     continue-on-error: false
     environment: "${{ inputs.environment }}"
 
