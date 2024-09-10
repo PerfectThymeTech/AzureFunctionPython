@@ -66,7 +66,7 @@ jobs:
 
           echo "Set ACL"
           az storage fs access set \
-            --acl "user::rwx,group::r-x,other::---,user:$USER_OBJECT_ID:$ACL_PERMISSIONS" \
+            --acl "user::rwx,group::r-x,other::---,mask::rwx,user:$USER_OBJECT_ID:$ACL_PERMISSIONS" \
             --path $STORAGE_CONTAINER_PATH \
             --file-system $STORAGE_CONTAINER_NAME \
             --account-name $STORAGE_ACCOUNT_NAME \
