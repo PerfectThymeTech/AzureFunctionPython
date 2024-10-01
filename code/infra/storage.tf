@@ -6,7 +6,7 @@ module "storage_account" {
   }
 
   location            = var.location
-  resource_group_name = azurerm_resource_group.logging_rg.name
+  resource_group_name = azurerm_resource_group.app_rg.name
   tags                = var.tags
 
   storage_account_name                            = replace("${local.prefix}-stg001", "-", "")
