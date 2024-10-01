@@ -1,44 +1,3 @@
-resource "azurerm_service_plan" "service_plan" {
-  name                = "${local.prefix}-asp001"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.app_rg.name
-  tags                = var.tags
-
-  # maximum_elastic_worker_count = 20
-  os_type                  = "Linux"
-  per_site_scaling_enabled = false
-  sku_name                 = var.function_sku
-  worker_count             = 1     # Update to '3' for production
-  zone_balancing_enabled   = false # Update to 'true' for production
-}
-
-data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_service_plan" {
-  resource_id = azurerm_service_plan.service_plan.id
-}
-
-resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" {
-  name                       = "logAnalytics"
-  target_resource_id         = azurerm_service_plan.service_plan.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
-
-  dynamic "enabled_log" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.log_category_groups
-    content {
-      category_group = entry.value
-    }
-  }
-
-  dynamic "metric" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.metrics
-    content {
-      category = entry.value
-      enabled  = true
-    }
-  }
-}
-
 resource "azapi_resource" "function" {
   type      = "Microsoft.Web/sites@2022-09-01"
   parent_id = azurerm_resource_group.app_rg.id
@@ -65,7 +24,7 @@ resource "azapi_resource" "function" {
       redundancyMode            = "None"
       reserved                  = true
       scmSiteAlsoStopped        = true
-      serverFarmId              = azurerm_service_plan.service_plan.id
+      serverFarmId              = module.app_service_plan.service_plan_id
       storageAccountRequired    = false
       vnetContentShareEnabled   = true
       vnetImagePullEnabled      = false # Set to 'true' when pulling image from private Azure Container Registry
@@ -91,7 +50,7 @@ resource "azapi_resource" "function" {
         appSettings = [
           {
             name  = "APPLICATIONINSIGHTS_CONNECTION_STRING"
-            value = azurerm_application_insights.application_insights.connection_string
+            value = module.application_insights.application_insights_connection_string
           },
           {
             name  = "AZURE_SDK_TRACING_IMPLEMENTATION"
@@ -123,7 +82,7 @@ resource "azapi_resource" "function" {
           },
           {
             name  = "WEBSITE_OS_TYPE"
-            value = azurerm_service_plan.service_plan.os_type
+            value = module.app_service_plan.service_plan_os_type
           },
           {
             name  = "WEBSITE_RUN_FROM_PACKAGE"
@@ -131,7 +90,7 @@ resource "azapi_resource" "function" {
           },
           {
             name  = "AzureWebJobsStorage__accountName"
-            value = azurerm_storage_account.storage.name
+            value = module.storage_account.storage_account_name
           },
           {
             name  = "AzureWebJobsSecretStorageType"
@@ -139,7 +98,7 @@ resource "azapi_resource" "function" {
           },
           {
             name  = "AzureWebJobsSecretStorageKeyVaultUri"
-            value = azurerm_key_vault.key_vault.vault_uri
+            value = module.key_vault.key_vault_uri
           },
           {
             name  = "WEBSITES_ENABLE_APP_SERVICE_STORAGE" # Disable when not running a container
@@ -219,11 +178,8 @@ resource "azapi_resource" "function" {
   #   "properties.siteConfig.appSettings"
   # ]
   depends_on = [
-    azurerm_private_endpoint.key_vault_private_endpoint,
-    azurerm_private_endpoint.storage_private_endpoint_blob,
-    azurerm_private_endpoint.storage_private_endpoint_file,
-    azurerm_private_endpoint.storage_private_endpoint_queue,
-    azurerm_private_endpoint.storage_private_endpoint_table,
+    module.key_vault.key_vault_setup_completed,
+    module.storage_account.storage_setup_completed,
   ]
 }
 
@@ -234,7 +190,7 @@ data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_function" {
 resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
   name                       = "logAnalytics"
   target_resource_id         = azapi_resource.function.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
   dynamic "enabled_log" {
     iterator = entry
@@ -267,11 +223,20 @@ resource "azurerm_private_endpoint" "function_private_endpoint" {
     private_connection_resource_id = azapi_resource.function.id
     subresource_names              = ["sites"]
   }
-  subnet_id = azapi_resource.subnet_services.id
-  private_dns_zone_group {
-    name = "${azapi_resource.function.name}-arecord"
-    private_dns_zone_ids = [
-      var.private_dns_zone_id_sites
+  subnet_id = azapi_resource.subnet_private_endpoints.id
+  dynamic "private_dns_zone_group" {
+    for_each = var.private_dns_zone_id_sites == "" ? [] : [1]
+    content {
+      name = "${azapi_resource.function.name}-arecord"
+      private_dns_zone_ids = [
+        var.private_dns_zone_id_sites
+      ]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      private_dns_zone_group
     ]
   }
 }

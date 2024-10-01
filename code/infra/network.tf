@@ -5,7 +5,7 @@ resource "azapi_resource" "subnet_function" {
 
   body = jsonencode({
     properties = {
-      addressPrefix = tostring(cidrsubnet(data.azurerm_virtual_network.virtual_network.address_space[0], 27 - tonumber(reverse(split("/", data.azurerm_virtual_network.virtual_network.address_space[0]))[0]), 2))
+      addressPrefix = var.subnet_cidr_function
       delegations = [
         {
           name = "FunctionDelegation"
@@ -29,14 +29,14 @@ resource "azapi_resource" "subnet_function" {
   })
 }
 
-resource "azapi_resource" "subnet_services" {
+resource "azapi_resource" "subnet_private_endpoints" {
   type      = "Microsoft.Network/virtualNetworks/subnets@2022-07-01"
   name      = "PeSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
   body = jsonencode({
     properties = {
-      addressPrefix = tostring(cidrsubnet(data.azurerm_virtual_network.virtual_network.address_space[0], 27 - tonumber(reverse(split("/", data.azurerm_virtual_network.virtual_network.address_space[0]))[0]), 3))
+      addressPrefix = var.subnet_cidr_private_endpoints
       delegations   = []
       ipAllocations = []
       networkSecurityGroup = {
