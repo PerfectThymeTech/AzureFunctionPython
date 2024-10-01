@@ -190,7 +190,7 @@ data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_function" {
 resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
   name                       = "logAnalytics"
   target_resource_id         = azapi_resource.function.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
   dynamic "enabled_log" {
     iterator = entry
@@ -224,10 +224,19 @@ resource "azurerm_private_endpoint" "function_private_endpoint" {
     subresource_names              = ["sites"]
   }
   subnet_id = azapi_resource.subnet_private_endpoints.id
-  private_dns_zone_group {
-    name = "${azapi_resource.function.name}-arecord"
-    private_dns_zone_ids = [
-      var.private_dns_zone_id_sites
+  dynamic "private_dns_zone_group" {
+    for_each = var.private_dns_zone_id_sites == "" ? [] : [1]
+    content {
+      name = "${azapi_resource.function.name}-arecord"
+      private_dns_zone_ids = [
+        var.private_dns_zone_id_sites
+      ]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      private_dns_zone_group
     ]
   }
 }
