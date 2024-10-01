@@ -25,7 +25,7 @@ locals {
     resource_group_name = split("/", var.route_table_id)[4]
     name                = split("/", var.route_table_id)[8]
   }
-  
+
   # Logging locals
   diagnostics_configurations = [
     {
