@@ -1,6 +1,6 @@
 resource "azurerm_monitor_activity_log_alert" "monitor_activity_log_alert_service_health" {
   name                = "${local.prefix}-alert-servicehealth"
-  location            = var.location
+  location            = "global"
   resource_group_name = azurerm_resource_group.logging_rg.name
   tags                = var.tags
 
