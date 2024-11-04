@@ -1,9 +1,9 @@
 resource "azapi_resource" "subnet_function" {
-  type      = "Microsoft.Network/virtualNetworks/subnets@2022-07-01"
+  type      = "Microsoft.Network/virtualNetworks/subnets@2024-03-01"
   name      = "FunctionSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
-  body = jsonencode({
+  body = {
     properties = {
       addressPrefix = var.subnet_cidr_function
       delegations = [
@@ -26,15 +26,15 @@ resource "azapi_resource" "subnet_function" {
       serviceEndpointPolicies = []
       serviceEndpoints        = []
     }
-  })
+  }
 }
 
 resource "azapi_resource" "subnet_private_endpoints" {
-  type      = "Microsoft.Network/virtualNetworks/subnets@2022-07-01"
+  type      = "Microsoft.Network/virtualNetworks/subnets@2024-03-01"
   name      = "PeSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
-  body = jsonencode({
+  body = {
     properties = {
       addressPrefix = var.subnet_cidr_private_endpoints
       delegations   = []
@@ -50,7 +50,7 @@ resource "azapi_resource" "subnet_private_endpoints" {
       serviceEndpointPolicies = []
       serviceEndpoints        = []
     }
-  })
+  }
 
   depends_on = [
     azapi_resource.subnet_function

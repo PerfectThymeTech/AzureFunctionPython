@@ -8,7 +8,7 @@ resource "azapi_resource" "function" {
     type = "SystemAssigned"
   }
 
-  body = jsonencode({
+  body = {
     kind = "functionapp,linux,container"
     properties = {
       clientAffinityEnabled     = false
@@ -171,12 +171,14 @@ resource "azapi_resource" "function" {
         webSocketsEnabled                      = false
       }
     }
-  })
+  }
 
   schema_validation_enabled = false
-  # ignore_body_changes = [ # Required when app settings are managed in a separate process
-  #   "properties.siteConfig.appSettings"
-  # ]
+  # lifecycle {
+  #   ignore_changes = [
+  #     body.properties.siteConfig.appSettings, # Required when app settings are managed in a separate process
+  #   ]
+  # }
   depends_on = [
     module.key_vault.key_vault_setup_completed,
     module.storage_account.storage_setup_completed,
