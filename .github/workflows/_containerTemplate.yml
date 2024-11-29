@@ -83,7 +83,7 @@ jobs:
       # Extract Metadata (tags, labels)
       - name: Extract Metadata
         id: metadata
-        uses: docker/metadata-action@v5.5.1
+        uses: docker/metadata-action@v5.6.1
         with:
           context: workflow
           images: |
