@@ -9,5 +9,5 @@ pydantic-settings~=2.7.0
 httpx~=0.28.1
 azure-monitor-opentelemetry-exporter==1.0.0b32
 opentelemetry-instrumentation-fastapi==0.50b0
-opentelemetry-instrumentation-httpx~=0.49b2
+opentelemetry-instrumentation-httpx~=0.50b0
 opentelemetry-instrumentation-system-metrics~=0.50b0
