@@ -1,0 +1,85 @@
+name: Set ACL Permissions Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        default: "dev"
+        description: "Specifies the environment of the deployment."
+      storage_account_name:
+        required: true
+        type: string
+        description: "Specifies the name of the storage account."
+      storage_container_name:
+        required: true
+        type: string
+        description: "Specifies the name of the storage account container name."
+      storage_container_path:
+        required: true
+        type: string
+        description: "Specifies the path within the storage account container."
+      user_object_id:
+        required: true
+        type: string
+        description: "Specifies the object id of the identity that should be granted access."
+      acl_permissions:
+        required: true
+        type: string
+        description: "Specifies the acl permissions to be granted to the identity (e.g. 'rwx')."
+    secrets:
+      TENANT_ID:
+        required: true
+        description: "Specifies the tenant id of the deployment."
+      SUBSCRIPTION_ID:
+        required: true
+        description: "Specifies the subscription id of the deployment."
+      CLIENT_ID:
+        required: true
+        description: "Specifies the client id."
+      CLIENT_SECRET:
+        required: true
+        description: "Specifies the client secret."
+
+jobs:
+  exec:
+    name: Run Az CLI Command
+    runs-on: ubuntu-latest # [self-hosted, linux, adp]
+    continue-on-error: false
+    environment: "${{ inputs.environment }}"
+
+    steps:
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+
+      # Grant Access - ACL
+      - name: Grant Access - ACL
+        id: access_acl
+        run: |
+          echo "Set Azure Context"
+          az account set -s "${{ secrets.SUBSCRIPTION_ID }}"
+
+          echo "Set ACL"
+          az storage fs access set \
+            --acl "user::rwx,group::r-x,other::---,mask::rwx,user:$USER_OBJECT_ID:$ACL_PERMISSIONS" \
+            --path $STORAGE_CONTAINER_PATH \
+            --file-system $STORAGE_CONTAINER_NAME \
+            --account-name $STORAGE_ACCOUNT_NAME \
+            --auth-mode login
+        env:
+          USER_OBJECT_ID: ${{ inputs.user_object_id }}
+          ACL_PERMISSIONS: ${{ inputs.acl_permissions }}
+          STORAGE_ACCOUNT_NAME: ${{ inputs.storage_account_name }}
+          STORAGE_CONTAINER_NAME: ${{ inputs.storage_container_name }}
+          STORAGE_CONTAINER_PATH: ${{ inputs.storage_container_path }}
+
+      # Log out from Azure
+      - name: Log out from Azure
+        id: azure_logout
+        run: |
+          az logout

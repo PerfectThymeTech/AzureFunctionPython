@@ -1,0 +1,54 @@
+name: Set ACL Permissions
+on:
+  pull_request:
+    branches:
+      - main
+  # workflow_dispatch:
+  #   inputs:
+  #     environment:
+  #       required: true
+  #       description: 'Read environment for which the Terraform state shall be unlocked.'
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - tst
+  #         - prp
+  #         - prd
+  #       default: core_dev
+  #     storage_account_name:
+  #       required: true
+  #       type: string
+  #       description: "Specifies the name of the storage account."
+  #     storage_container_name:
+  #       required: true
+  #       type: string
+  #       description: "Specifies the name of the storage account container name."
+  #     storage_container_path:
+  #       required: true
+  #       type: string
+  #       description: "Specifies the path within the storage account container."
+  #     user_object_id:
+  #       required: true
+  #       type: string
+  #       description: "Specifies the object id of the identity that should be granted access."
+  #     acl_permissions:
+  #       required: true
+  #       type: string
+  #       description: "Specifies the acl permissions to be granted to the identity (e.g. 'rwx')."
+
+jobs:
+  set_acl:
+    uses: ./.github/workflows/_setAclPermissions.yml
+    name: "Set ACL Permissions"
+    with:
+      environment: "dev" # "${{ inputs.environment }}"
+      storage_account_name: "mabussadls001" # "${{ inputs.storage_account_name }}"
+      storage_container_name: "testsetacl" # "${{ inputs.storage_container_name }}"
+      storage_container_path: "/" # "${{ inputs.storage_container_path }}"
+      user_object_id: "c1b9add1-e5cb-47c7-aa95-be63e1d5fd11" # "${{ inputs.user_object_id }}"
+      acl_permissions: "rwx" # "${{ inputs.acl_permissions }}"
+    secrets:
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
