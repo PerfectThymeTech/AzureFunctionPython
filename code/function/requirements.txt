@@ -8,6 +8,6 @@ fastapi~=0.115.8
 pydantic-settings~=2.7.1
 httpx~=0.28.1
 azure-monitor-opentelemetry-exporter==1.0.0b33
-opentelemetry-instrumentation-fastapi==0.50b0
+opentelemetry-instrumentation-fastapi==0.51b0
 opentelemetry-instrumentation-httpx~=0.50b0
 opentelemetry-instrumentation-system-metrics~=0.50b0
